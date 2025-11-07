@@ -1,309 +1,397 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8" />
+<meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>올리셋 All Reset</title>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet" />
 <style>
-  body {
-    margin: 0;
-    font-family: 'Pretendard', sans-serif;
-    background-color: #111;
-    color: #fff;
-    overflow: hidden;
-  }
+  /* Pretendard 폰트 추가 */
+  body {
+    margin: 0;
+    font-family: 'Pretendard', sans-serif;
+    background-color: #f7f7f7; /* 배경색 변경 (원본 이미지 참고) */
+    color: #333; /* 기본 텍스트 색상 변경 */
+    overflow-x: hidden; /* 가로 스크롤 방지 */
+  }
 
-  /* 상단 로고 고정 */
-  header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    background: #fff;
-    text-align: center;
-    padding: 10px 0;
-    z-index: 1000;
-  }
-  header img {
-    height: 40px;
-  }
-  header h2 {
-    margin: 5px 0 0;
-    font-size: 14px;
-    color: #333;
-  }
+  /* 전체 컨테이너: 중앙 정렬 및 최대 너비 설정 */
+  .container {
+    max-width: 420px; /* 스마트폰 세로 모드에 적합한 너비 */
+    margin: 0 auto;
+    background-color: #fff; /* 메인 콘텐츠 배경색 */
+    min-height: 100vh; /* 최소 높이 설정 */
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    position: relative; /* 하단 버튼, 푸터 위치 기준 */
+  }
 
-  /* 메인 영역 */
-  main {
-    margin-top: 100px;
-    margin-bottom: 75px; /* (변경) 하단 버튼 영역에 맞게 축소 */
-    height: calc(100vh - 175px); /* (변경) 100(header) + 75(bottom) */
-    overflow-y: auto;
-    text-align: center;
-  }
+  /* 상단 로고 및 슬로건 */
+  header {
+    text-align: center;
+    padding: 30px 0 20px; /* 상단 패딩 증가, 하단 패딩 감소 */
+    border-bottom: 1px solid #eee;
+    background-color: #fff;
+  }
+  header img {
+    width: 150px; /* 로고 크기 증가 */
+    height: auto;
+    display: block;
+    margin: 0 auto 10px;
+  }
+  header h2 {
+    margin: 0;
+    font-size: 15px; /* 슬로건 폰트 크기 유지 */
+    color: #666; /* 슬로건 색상 유지 */
+    font-weight: normal;
+  }
 
-  .question {
-    display: none;
-    animation: fadeIn 0.3s ease-in-out;
-  }
-  .question.active {
-    display: block;
-  }
+  /* 메인 콘텐츠 영역 */
+  main {
+    padding: 20px 20px 100px; /* 하단 버튼 및 푸터 공간 확보 */
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch; /* iOS 스크롤 부드럽게 */
+    height: calc(100vh - 250px); /* 헤더, 푸터, 버튼 높이 고려 */
+  }
+  
+  /* 환영 메시지 */
+  .welcome-message {
+    background-color: #e0f2f1; /* 연한 민트색 배경 */
+    color: #212121; /* 진한 텍스트 색상 */
+    padding: 15px 20px;
+    border-radius: 12px;
+    text-align: left;
+    margin-bottom: 30px;
+    line-height: 1.5;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  }
+  .welcome-message h3 {
+    margin: 0 0 8px;
+    font-size: 17px;
+    color: #00796b; /* 포인트 색상 */
+  }
+  .welcome-message p {
+    margin: 0;
+    font-size: 15px;
+  }
 
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
+  /* 질문 스타일 */
+  .question {
+    display: none;
+    animation: fadeIn 0.4s ease-out forwards; /* 등장 애니메이션 */
+    text-align: left; /* 질문 텍스트 왼쪽 정렬 */
+    margin-bottom: 25px;
+  }
+  .question.active {
+    display: block;
+  }
+  .question h3 {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 15px;
+    font-weight: 600;
+  }
 
-  .options {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px;
-    margin-top: 15px;
-    padding: 0 10px; /* 좌우 여백 추가 */
-  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
 
-  .option-button {
-    background-color: #222;
-    border: 1px solid #444;
-    color: #ccc;
-    padding: 10px 18px;
-    border-radius: 30px;
-    font-size: 15px;
-    transition: all 0.2s ease;
-    cursor: pointer;
-  }
+  /* 옵션 버튼 그룹 */
+  .options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px; /* 버튼 간 간격 */
+    justify-content: flex-start; /* 버튼 왼쪽 정렬 */
+  }
 
-  .option-button.active {
-    background-color: #00bfa5;
-    color: #fff;
-    border: none;
-    box-shadow: 0 0 8px #00bfa5;
-  }
+  .option-button {
+    background-color: #f0f0f0; /* 비활성 버튼 배경색 */
+    border: 1px solid #ddd;
+    color: #555;
+    padding: 12px 18px; /* 패딩 조정 */
+    border-radius: 25px; /* 둥근 버튼 */
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-grow: 0; /* 버튼이 너무 커지지 않도록 */
+    flex-shrink: 0;
+  }
 
-  /* (신규) 결과 요약 텍스트 */
-  #summary {
-    line-height: 1.6;
-    padding: 0 20px;
-    color: #ddd;
-  }
+  .option-button:hover {
+    background-color: #e0e0e0;
+  }
 
-  /* (신규) SMS 버튼 스타일 */
-  #sendSMS {
-    background: #00bfa5;
-    color: white;
-    border: none;
-    border-radius: 30px;
-    padding: 12px 25px;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    margin-top: 20px;
-    transition: background-color 0.2s ease;
-  }
-  #sendSMS:hover {
-    background-color: #00a892;
-  }
+  .option-button.active {
+    background-color: #00bfa5; /* 활성 버튼 배경색 */
+    color: #fff;
+    border-color: #00bfa5;
+    box-shadow: 0 2px 6px rgba(0, 191, 165, 0.4);
+  }
 
+  /* 결과 요약 */
+  #result h3 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  #summary {
+    background-color: #f5f5f5;
+    border: 1px solid #eee;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    font-size: 16px;
+    line-height: 1.6;
+    color: #444;
+    text-align: center;
+  }
 
-  /* 하단 버튼 */
-  .fixed-buttons {
-    position: fixed;
-    bottom: 20px; /* (변경) 35px -> 20px, footer와의 간격 축소 */
-    left: 0;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    z-index: 999;
-  }
+  /* 문자로 상담요청 버튼 */
+  #sendSMS {
+    display: block; /* 블록 요소로 만들어 중앙 정렬 */
+    width: fit-content; /* 내용에 맞춰 너비 조정 */
+    margin: 20px auto 0; /* 중앙 정렬 */
+    background: #ffc107; /* 카카오톡과 유사한 노란색 계열 */
+    color: #333;
+    border: none;
+    border-radius: 30px;
+    padding: 15px 30px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    box-shadow: 0 4px 8px rgba(255, 193, 7, 0.4);
+  }
+  #sendSMS:hover {
+    background-color: #ffca28;
+    transform: translateY(-2px);
+  }
 
-  .fixed-buttons button {
-    background: #00bfa5;
-    color: white;
-    border: none;
-    border-radius: 30px;
-    padding: 12px 20px;
-    font-size: 15px;
-    cursor: pointer;
-  }
+  /* 하단 고정 버튼 (전화하기) */
+  .fixed-buttons {
+    position: absolute; /* container를 기준으로 절대 위치 */
+    bottom: 60px; /* 푸터 위로 간격 조정 */
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 0 20px; /* 좌우 패딩 */
+    box-sizing: border-box; /* 패딩이 너비에 포함되도록 */
+    z-index: 999;
+  }
 
-  /* 회사정보 */
-  footer {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background: #111;
-    color: #888;
-    font-size: 11px;
-    white-space: nowrap;
-    overflow: hidden;
-    padding: 5px 0; /* (추가) 상하 여백 */
-  }
+  .fixed-buttons button {
+    flex: 1; /* 가로 전체 차지 */
+    background: #00bfa5; /* 전화 상담 버튼 색상 유지 */
+    color: white;
+    border: none;
+    border-radius: 30px;
+    padding: 15px 0; /* 세로 패딩 */
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 191, 165, 0.4);
+    transition: background-color 0.2s ease, transform 0.2s ease;
+  }
+  .fixed-buttons button:hover {
+    background-color: #00a892;
+    transform: translateY(-2px);
+  }
 
-  .scroll-text {
-    display: inline-block;
-    animation: marquee 25s linear infinite;
-    padding-left: 0;
-  }
+  /* 회사 정보 푸터 */
+  footer {
+    position: absolute; /* container를 기준으로 절대 위치 */
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: #fff; /* 배경색 변경 */
+    color: #888;
+    font-size: 11px;
+    white-space: nowrap;
+    overflow: hidden;
+    padding: 10px 0; /* 상하 여백 조정 */
+    text-align: center;
+    border-top: 1px solid #eee;
+  }
 
-  @keyframes marquee {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-100%); }
-  }
+  .scroll-text {
+    display: inline-block;
+    animation: marquee 25s linear infinite;
+    padding: 0 20px; /* 좌우 패딩 추가 */
+  }
+
+  @keyframes marquee {
+    0% { transform: translateX(100%); } /* 오른쪽에서 시작 */
+    100% { transform: translateX(-100%); } /* 왼쪽으로 이동 */
+  }
 </style>
 </head>
 
 <body>
-  <header>
-    <img src="logo.png" alt="올리셋 로고" />
-    <h2>당신이 떠난 자리, 몸만 떠나세요</h2>
-  </header>
+  <div class="container">
+    <header>
+      <img src="logo.png" alt="올리셋 로고" />
+      <h2>당신이 떠난 자리, 몸만 떠나세요</h2>
+    </header>
 
-  <main>
-        <div class="question active" id="q1">
-      <h3>어떤 공간을 정리하시겠어요?</h3>
-      <div class="options">
-        <button class="option-button">주거공간</button>
-        <button class="option-button">공장</button>
-        <button class="option-button">사무실</button>
-        <button class="option-button">식당</button>
-        <button class="option-button">창고</button>
-        <button class="option-button">학원</button>
-        <button class="option-button">병원</button>
-        <button class="option-button">상가</button>
-      </div>
-    </div>
+    <main>
+      <div class="welcome-message">
+        <h3>👋 안녕하세요, 올리셋입니다.</h3>
+        <p>도움이 필요한 공간을 알려주세요.</p>
+      </div>
 
-        <div class="question" id="q2">
-      <h3>어떤 상황인가요?</h3>
-      <div class="options">
-        <button class="option-button">이사</button>
-        <button class="option-button">이혼</button>
-        <button class="option-button">이민</button>
-        <button class="option-button">폐업</button>
-        <button class="option-button">이전</button>
-        <button class="option-button">리모델링</button>
-        <button class="option-button">철거</button>
-      </div>
-    </div>
+      <div class="question active" id="q1">
+        <h3>어떤 공간을 정리하시겠어요?</h3>
+        <div class="options">
+          <button class="option-button">주거공간</button>
+          <button class="option-button">사무실</button>
+          <button class="option-button">공장</button>
+          <button class="option-button">식당</button>
+          <button class="option-button">원룸</button>
+          <button class="option-button">상가</button>
+          <button class="option-button">빌라</button>
+          <button class="option-button">아파트</button>
+          <button class="option-button">창고</button>
+          <button class="option-button">시설물</button>
+          <button class="option-button">야외공간</button>
+          <button class="option-button">공연장</button>
+          <button class="option-button">촬영장</button>
+          <button class="option-button">기타 공간</button>
+        </div>
+      </div>
 
-        <div class="question" id="q3">
-      <h3>어떤 작업이 필요하신가요?</h3>
-      <div class="options">
-        <button class="option-button">청소</button>
-        <button class="option-button">폐기물 처리</button>
-        <button class="option-button">정리정돈</button>
-        <button class="option-button">원상복구</button>
-        <button class="option-button">재판매</button>
-        <button class="option-button">전체 일괄정리</button>
-      </div>
-    </div>
+      <div class="question" id="q2">
+        <h3>어떤 상황인가요?</h3>
+        <div class="options">
+          <button class="option-button">이사</button>
+          <button class="option-button">이혼</button>
+          <button class="option-button">이민</button>
+          <button class="option-button">폐업</button>
+          <button class="option-button">이전</button>
+          <button class="option-button">리모델링</button>
+          <button class="option-button">철거</button>
+        </div>
+      </div>
 
-        <div class="question" id="q4">
-      <h3>규모를 선택해주세요</h3>
-      <div class="options">
-        <button class="option-button">10평 미만</button>
-        <button class="option-button">20평 미만</button>
-        <button class="option-button">30평 미만</button>
-        <button class="option-button">50평 미만</button>
-        <button class="option-button">100평 미만</button>
-        <button class="option-button">500평 미만</button>
-        <button class="option-button">1000평 미만</button>
-        <button class="option-button">1000평 이상</button>
-        <button class="option-button">소규모</button>
-        <button class="option-button">대규모</button>
-        <button class="option-button">정기적인</button>
-        <button class="option-button">잘 모름</button>
-      </div>
-    </div>
+      <div class="question" id="q3">
+        <h3>어떤 작업이 필요하신가요?</h3>
+        <div class="options">
+          <button class="option-button">청소</button>
+          <button class="option-button">폐기물 처리</button>
+          <button class="option-button">정리정돈</button>
+          <button class="option-button">원상복구</button>
+          <button class="option-button">재판매</button>
+          <button class="option-button">전체 일괄정리</button>
+        </div>
+      </div>
 
-        <div class="question" id="q5">
-      <h3>지역을 선택해주세요</h3>
-      <div class="options">
-        <button class="option-button">서울</button>
-        <button class="option-button">경기</button>
-        <button class="option-button">인천</button>
-        <button class="option-button">강원</button>
-        <button class="option-button">충북</button>
-        <button class="option-button">충남</button>
-        <button class="option-button">전북</button>
-        <button class="option-button">전남</button>
-        <button class="option-button">경북</button>
-        <button class="option-button">경남</button>
-        <button class="option-button">부산</button>
-        <button class="option-button">대구</button>
-        <button class="option-button">광주</button>
-        <button class="option-button">대전</button>
-        <button class="option-button">울산</button>
-        <button class="option-button">세종</button>
-        <button class="option-button">제주</button>
-      </div>
-    </div>
+      <div class="question" id="q4">
+        <h3>규모를 선택해주세요</h3>
+        <div class="options">
+          <button class="option-button">10평 미만</button>
+          <button class="option-button">20평 미만</button>
+          <button class="option-button">30평 미만</button>
+          <button class="option-button">50평 미만</button>
+          <button class="option-button">100평 미만</button>
+          <button class="option-button">500평 미만</button>
+          <button class="option-button">1000평 미만</button>
+          <button class="option-button">1000평 이상</button>
+          <button class="option-button">소규모</button>
+          <button class="option-button">대규모</button>
+          <button class="option-button">정기적인</button>
+          <button class="option-button">잘 모름</button>
+        </div>
+      </div>
 
-        <div class="question" id="result">
-      <h3>요청 내용 요약</h3>
-      <p id="summary">선택하신 내용: </p>
-      <button id="sendSMS">📩 문자로 상담요청 보내기</button>
-    </div>
-  </main>
+      <div class="question" id="q5">
+        <h3>지역을 선택해주세요</h3>
+        <div class="options">
+          <button class="option-button">서울</button>
+          <button class="option-button">경기</button>
+          <button class="option-button">인천</button>
+          <button class="option-button">강원</button>
+          <button class="option-button">충북</button>
+          <button class="option-button">충남</button>
+          <button class="option-button">전북</button>
+          <button class="option-button">전남</button>
+          <button class="option-button">경북</button>
+          <button class="option-button">경남</button>
+          <button class="option-button">부산</button>
+          <button class="option-button">대구</button>
+          <button class="option-button">광주</button>
+          <button class="option-button">대전</button>
+          <button class="option-button">울산</button>
+          <button class="option-button">세종</button>
+          <button class="option-button">제주</button>
+        </div>
+      </div>
 
-  <div class="fixed-buttons">
-    <button onclick="window.location.href='tel:16661757'">📞 전화하기</button>
-      </div>
+      <div class="question" id="result">
+        <h3>요청 내용 요약</h3>
+        <p id="summary">선택하신 내용: </p>
+        <button id="sendSMS">📩 문자로 상담요청 보내기</button>
+      </div>
+    </main>
 
-  <footer>
-    <div class="scroll-text">
-      상호: (주)디에이치씨솔루션 | 주소: 서울특별시 송파구 거여동 604-3 아피체 제8층 제806호 | 대표: 김동현 | TEL: 02-1666-1757 | 
-      팩스: 0504-187-0081 | 사업자등록번호: 140-87-00987 | 개인정보책임자: 박경혜 | E-mail: dhc-solution@naver.com
-    </div>
-  </footer>
+    <div class="fixed-buttons">
+      <button onclick="window.location.href='tel:16661757'">📞 전화상담</button>
+    </div>
 
-  <script>
-    const questions = document.querySelectorAll('.question');
-    let current = 0;
-    let answers = [];
+    <footer>
+      <div class="scroll-text">
+        상호: (주)디에이치씨솔루션 | 주소: 서울특별시 송파구 거여동 604-3 아피체 제8층 제806호 | 대표: 김동현 | TEL: 02-1666-1757 | 
+        팩스: 0504-187-0081 | 사업자등록번호: 140-87-00987 | 개인정보책임자: 박경혜 | E-mail: dhc-solution@naver.com
+      </div>
+    </footer>
+  </div> <script>
+    const questions = document.querySelectorAll('.question');
+    let current = 0;
+    let answers = [];
 
-    document.querySelectorAll('.option-button').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const parent = btn.closest('.question');
-        parent.querySelectorAll('.option-button').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        setTimeout(() => showNext(), 200);
-      });
-    });
+    document.querySelectorAll('.option-button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const parent = btn.closest('.question');
+        // 같은 질문 내 다른 버튼의 active 클래스 제거
+        parent.querySelectorAll('.option-button').forEach(b => b.classList.remove('active'));
+        // 클릭한 버튼에 active 클래스 추가
+        btn.classList.add('active');
+        // 다음 질문으로 이동 (딜레이 후)
+        setTimeout(() => showNext(), 200);
+      });
+    });
 
-    function showNext() {
-      if (current < questions.length) {
-        questions[current].classList.remove('active');
-      }
-      current++;
-      if (current < questions.length) {
-        questions[current].classList.add('active');
-      }
-      // (변경) 마지막 질문인지 확인하는 로직 수정
-      if (current === questions.length - 1) { 
-        summarize();
-      }
-    }
+    function showNext() {
+      if (current < questions.length) {
+        questions[current].classList.remove('active'); // 현재 질문 비활성화
+      }
+      current++; // 다음 질문 인덱스
+      if (current < questions.length) {
+        questions[current].classList.add('active'); // 다음 질문 활성화
+      }
+      // 모든 질문을 거친 후 결과 요약
+      if (current === questions.length) { // 모든 질문을 다 보여준 후
+        summarize();
+      }
+    }
 
-    function summarize() {
-      answers = [];
-      // (변경) result 전까지의 모든 active 버튼 수집
-      document.querySelectorAll('.question:not(#result) .option-button.active').forEach(btn => {
-        answers.push(btn.textContent);
-      });
-      document.getElementById('summary').textContent = `선택하신 내용: ${answers.join(', ')}`;
-    }
+    function summarize() {
+      answers = [];
+      // 각 질문에서 선택된 답변만 수집 (결과창 제외)
+      document.querySelectorAll('.question:not(#result) .option-button.active').forEach(btn => {
+        answers.push(btn.textContent);
+      });
+      document.getElementById('summary').textContent = `선택하신 내용: ${answers.join(', ')}`;
+    }
 
-    document.getElementById('sendSMS').addEventListener('click', () => {
-      // 요약본을 다시 생성하여 최신 정보 반영
-      summarize(); 
-      const text = encodeURIComponent(`[올리셋 상담요청]\n${answers.join(', ')}`);
-      window.location.href = `sms:01057138417?body=${text}`;
-    });
-  </script>
+    document.getElementById('sendSMS').addEventListener('click', () => {
+      summarize(); // 혹시 모를 경우를 대비하여 다시 요약
+      const text = encodeURIComponent(`[올리셋 상담요청]\n${answers.join(', ')}`);
+      window.location.href = `sms:01057138417?body=${text}`;
+    });
+
+    // 페이지 로드 시 첫 질문 활성화 (이미 active 클래스가 있으므로 필요 없을 수 있지만, 안전을 위해)
+    // if (questions.length > 0) {
+    //   questions[0].classList.add('active');
+    // }
+  </script>
 </body>
 </html>
