@@ -1,644 +1,83 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DHC Solution - 시설물관리, 시설물복원, 특수청소, 실내공기질관리</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Malgun Gothic', '맑은 고딕', sans-serif;
-            color: #333;
-            line-height: 1.6;
-        }
-        
-        /* 상단 정보바 */
-        .top-info {
-            background: #1a1a1a;
-            color: #fff;
-            padding: 8px 0;
-            font-size: 12px;
-        }
-        
-        .top-info-inner {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-            display: flex;
-            justify-content: space-between;
-        }
-        
-        /* 헤더 */
-        header {
-            background: #fff;
-            border-bottom: 1px solid #e0e0e0;
-        }
-        
-        .header-inner {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .logo {
-            font-size: 28px;
-            font-weight: bold;
-            color: #2c3e50;
-        }
-        
-        .logo span {
-            color: #3498db;
-        }
-        
-        .contact-info {
-            text-align: right;
-        }
-        
-        .contact-info .tel {
-            font-size: 24px;
-            font-weight: bold;
-            color: #e74c3c;
-        }
-        
-        .contact-info .text {
-            font-size: 13px;
-            color: #666;
-        }
-        
-        /* 네비게이션 */
-        nav {
-            background: #2c3e50;
-            border-bottom: 3px solid #3498db;
-        }
-        
-        .nav-inner {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        nav ul {
-            list-style: none;
-            display: flex;
-        }
-        
-        nav > ul > li {
-            position: relative;
-            flex: 1;
-        }
-        
-        nav > ul > li > a {
-            display: block;
-            color: #fff;
-            text-decoration: none;
-            padding: 18px 20px;
-            text-align: center;
-            font-weight: 500;
-            transition: background 0.3s;
-        }
-        
-        nav > ul > li > a:hover {
-            background: #34495e;
-        }
-        
-        /* 서브메뉴 */
-        .submenu {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            width: 100%;
-            background: #34495e;
-            display: none;
-            z-index: 100;
-        }
-        
-        nav > ul > li:hover .submenu {
-            display: block;
-        }
-        
-        .submenu li a {
-            display: block;
-            padding: 12px 20px;
-            color: #fff;
-            text-decoration: none;
-            font-size: 14px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-        
-        .submenu li a:hover {
-            background: #2c3e50;
-            padding-left: 25px;
-        }
-        
-        /* 메인 슬라이더 */
-        .main-visual {
-            position: relative;
-            height: 450px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            overflow: hidden;
-        }
-        
-        .main-visual::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 450"><rect fill="rgba(255,255,255,0.05)" width="100%" height="100%"/></svg>');
-        }
-        
-        .visual-content {
-            position: relative;
-            text-align: center;
-            z-index: 1;
-        }
-        
-        .visual-content h1 {
-            font-size: 48px;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-        
-        .visual-content p {
-            font-size: 20px;
-            margin-bottom: 30px;
-        }
-        
-        /* 솔루션 섹션 */
-        .solution-section {
-            max-width: 1200px;
-            margin: 60px auto;
-            padding: 0 20px;
-        }
-        
-        .section-title {
-            text-align: center;
-            margin-bottom: 50px;
-        }
-        
-        .section-title h2 {
-            font-size: 36px;
-            color: #2c3e50;
-            margin-bottom: 10px;
-        }
-        
-        .section-title p {
-            color: #666;
-            font-size: 16px;
-        }
-        
-        .solution-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 30px;
-            margin-bottom: 60px;
-        }
-        
-        .solution-item {
-            background: #fff;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            overflow: hidden;
-            transition: all 0.3s;
-            cursor: pointer;
-        }
-        
-        .solution-item:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
-            border-color: #3498db;
-        }
-        
-        .solution-image {
-            height: 180px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 60px;
-        }
-        
-        .solution-content {
-            padding: 25px;
-        }
-        
-        .solution-content h3 {
-            font-size: 22px;
-            color: #2c3e50;
-            margin-bottom: 15px;
-        }
-        
-        .solution-content p {
-            color: #666;
-            line-height: 1.8;
-            font-size: 14px;
-            margin-bottom: 15px;
-        }
-        
-        .more-btn {
-            display: inline-block;
-            color: #3498db;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-        
-        .more-btn:hover {
-            color: #2980b9;
-        }
-        
-        /* 새로 추가된 청소서비스 섹션 */
-        .cleaning-section {
-            background: #f8f9fa;
-            padding: 60px 0;
-        }
-        
-        .cleaning-inner {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        
-        .cleaning-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
-        }
-        
-        .cleaning-item {
-            background: #fff;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            padding: 25px;
-            text-align: center;
-            transition: all 0.3s;
-            cursor: pointer;
-        }
-        
-        .cleaning-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-        
-        .cleaning-item .icon {
-            font-size: 48px;
-            margin-bottom: 15px;
-        }
-        
-        .cleaning-item h4 {
-            font-size: 18px;
-            color: #2c3e50;
-            margin-bottom: 10px;
-        }
-        
-        .cleaning-item p {
-            font-size: 13px;
-            color: #666;
-            line-height: 1.6;
-        }
-        
-        /* 회사소개 섹션 */
-        .company-section {
-            background: #2c3e50;
-            color: #fff;
-            padding: 60px 0;
-        }
-        
-        .company-inner {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-            text-align: center;
-        }
-        
-        .company-inner h2 {
-            font-size: 36px;
-            margin-bottom: 20px;
-        }
-        
-        .company-inner p {
-            font-size: 16px;
-            line-height: 2;
-            margin-bottom: 40px;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        
-        /* 푸터 */
-        footer {
-            background: #1a1a1a;
-            color: #999;
-            padding: 40px 0 20px;
-        }
-        
-        .footer-inner {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        
-        .footer-content {
-            margin-bottom: 30px;
-        }
-        
-        .footer-content p {
-            font-size: 13px;
-            line-height: 1.8;
-            margin-bottom: 5px;
-        }
-        
-        .footer-bottom {
-            border-top: 1px solid #333;
-            padding-top: 20px;
-            text-align: center;
-            font-size: 12px;
-        }
-        
-        @media (max-width: 1024px) {
-            .solution-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .cleaning-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-        
-        @media (max-width: 768px) {
-            nav > ul {
-                flex-direction: column;
-            }
-            
-            .solution-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .cleaning-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .visual-content h1 {
-                font-size: 32px;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>리셋클린 – 뒷처리 전문 서비스</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <style>
+    body { font-family: 'Pretendard', sans-serif; background-color: #0f0f0f; color: #f5f5f5; }
+    .gold { color: #eab308; }
+    .gradient-bg { background: linear-gradient(135deg, #1f1f1f, #2b2b2b); }
+    .btn-main { background-color: #eab308; color: #000; font-weight: 600; }
+  </style>
 </head>
-<body>
-    <!-- 상단 정보바 -->
-    <div class="top-info">
-        <div class="top-info-inner">
-            <div>시설물관리, 시설물복원, 특수청소, 실내공기질관리 전문기업</div>
-            <div>E-mail: info@dhcsolution.com</div>
-        </div>
+<body class="overflow-x-hidden">
+
+  <!-- Header -->
+  <header class="p-5 flex justify-between items-center gradient-bg shadow-lg">
+    <h1 class="text-lg font-bold tracking-wide gold">리셋클린</h1>
+    <a href="tel:010-1234-5678" class="text-sm text-gray-300">📞 010-1234-5678</a>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="flex flex-col items-center text-center py-16 px-5" data-aos="fade-up">
+    <h2 class="text-3xl font-bold mb-3 gold">모든 뒷정리를 한 번에</h2>
+    <p class="text-gray-300 mb-6 leading-relaxed">
+      이사, 이혼, 폐업, 공장이전, 유품정리까지<br>
+      당신의 시간을 아껴드리는 <span class="gold">원스톱 뒷처리 전문업체</span>
+    </p>
+    <a href="https://pf.kakao.com/_example" target="_blank" 
+       class="btn-main px-6 py-3 rounded-full text-base shadow-md hover:bg-yellow-500 transition">
+       카톡 상담하기
+    </a>
+  </section>
+
+  <!-- Services -->
+  <section class="py-10 px-5 space-y-8">
+    <div data-aos="fade-up">
+      <h3 class="text-2xl font-semibold gold mb-3">💼 주요 서비스</h3>
+      <ul class="space-y-3 text-gray-200">
+        <li>• 이사/이민 후 정리 및 청소</li>
+        <li>• 식당, 공장, 사무실 폐업 정리</li>
+        <li>• 원상복구 및 폐기물 처리</li>
+        <li>• 유품정리 및 잔여물 재판매 대행</li>
+        <li>• 긴급 정리 및 철거 지원</li>
+      </ul>
     </div>
-    
-    <!-- 헤더 -->
-    <header>
-        <div class="header-inner">
-            <div class="logo">
-                DHC <span>Solution</span>
-            </div>
-            <div class="contact-info">
-                <div class="tel">☎ 02-1666-1757</div>
-                <div class="text">팩스: 0504-187-0081</div>
-            </div>
-        </div>
-    </header>
-    
-    <!-- 네비게이션 -->
-    <nav>
-        <div class="nav-inner">
-            <ul>
-                <li>
-                    <a href="#company">COMPANY</a>
-                    <ul class="submenu">
-                        <li><a href="#company-intro">회사소개</a></li>
-                        <li><a href="#organization">조직도</a></li>
-                        <li><a href="#certificate">인증서</a></li>
-                        <li><a href="#clients">고객사소개</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="#mos">MOS Solution</a>
-                    <ul class="submenu">
-                        <li><a href="#mos-solution">MOS 솔루션</a></li>
-                        <li><a href="#mos-maintenance">MOS 메인테넌스</a></li>
-                        <li><a href="#mos-product">MOS 제품소개</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="#avk">AVK Solution</a>
-                    <ul class="submenu">
-                        <li><a href="#avk-solution">AVK 솔루션</a></li>
-                        <li><a href="#duct-cleaning">덕트크리닝</a></li>
-                        <li><a href="#hvac">HVAC공정효율화</a></li>
-                        <li><a href="#sterilization">공간살균</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="#dryice">DRYICE Solution</a>
-                    <ul class="submenu">
-                        <li><a href="#dryice-solution">DRYICE 솔루션</a></li>
-                        <li><a href="#dryice-cleaning">DRYICE 크리닝</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="#cleaning">종합청소</a>
-                    <ul class="submenu">
-                        <li><a href="#home-cleaning">가정청소</a></li>
-                        <li><a href="#office-cleaning">사무실청소</a></li>
-                        <li><a href="#factory-cleaning">공장청소</a></li>
-                        <li><a href="#restaurant-cleaning">식당청소</a></li>
-                        <li><a href="#studio-cleaning">원룸청소</a></li>
-                        <li><a href="#corporate-cleaning">기업청소</a></li>
-                        <li><a href="#special-cleaning">특수청소</a></li>
-                        <li><a href="#hospital-cleaning">병원청소</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="#notice">NOTICE</a>
-                    <ul class="submenu">
-                        <li><a href="#notice-list">공지사항</a></li>
-                        <li><a href="#estimate">견적문의</a></li>
-                        <li><a href="#partnership">제휴문의</a></li>
-                        <li><a href="#gallery">시공갤러리</a></li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-    </nav>
-    
-    <!-- 메인 비주얼 -->
-    <section class="main-visual">
-        <div class="visual-content">
-            <h1>환경개선솔루션 / 하우스메인테넌스 / 실내공기질관리</h1>
-            <p>당사는 일본의 특화된 장비와 케미칼을 이용하여 시설물의 위생, 미관, 공조시스템분야에서<br>
-            이제껏 경험할수 없었던 새로운 차원의 메인테넌스 솔루션을 제공합니다!!</p>
-        </div>
-    </section>
-    
-    <!-- 주요 솔루션 -->
-    <section class="solution-section">
-        <div class="section-title">
-            <h2>전문 솔루션</h2>
-            <p>DHC Solution의 특화된 기술과 노하우</p>
-        </div>
-        
-        <div class="solution-grid">
-            <!-- DRYICE Solution -->
-            <div class="solution-item">
-                <div class="solution-image">❄️</div>
-                <div class="solution-content">
-                    <h3>DRYICE Solution</h3>
-                    <p>드라이아이스가 세척대상물의 표면에 충돌하고 세척대상물의 이물질을 초저온으로 급속 동결시킨 후 수많은 균열을 일으켜, 이물질 사이로 침투됨과 동시에 승화하면서, 부피가 팽창하여 이물질만을 풍압에 의해 세척하는 솔루션입니다.</p>
-                    <a href="#dryice" class="more-btn">자세히보기 →</a>
-                </div>
-            </div>
-            
-            <!-- MOS Solution -->
-            <div class="solution-item">
-                <div class="solution-image">🔧</div>
-                <div class="solution-content">
-                    <h3>MOS Solution</h3>
-                    <p>시설물의 효율적인 관리와 복원을 위한 전문 솔루션. 건물 외벽, 내부 시설물의 미관 개선 및 유지보수 서비스를 제공합니다.</p>
-                    <a href="#mos" class="more-btn">자세히보기 →</a>
-                </div>
-            </div>
-            
-            <!-- AVK Solution -->
-            <div class="solution-item">
-                <div class="solution-image">💨</div>
-                <div class="solution-content">
-                    <h3>AVK Solution</h3>
-                    <p>실내공기질 개선을 위한 덕트 크리닝, HVAC 시스템 효율화, 공간살균 등 쾌적한 실내환경 조성을 위한 종합 솔루션입니다.</p>
-                    <a href="#avk" class="more-btn">자세히보기 →</a>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <!-- 종합청소 서비스 -->
-    <section class="cleaning-section" id="cleaning">
-        <div class="cleaning-inner">
-            <div class="section-title">
-                <h2>종합청소 서비스</h2>
-                <p>전문적이고 체계적인 청소 서비스로 깨끗한 환경을 만들어드립니다</p>
-            </div>
-            
-            <div class="cleaning-grid">
-                <div class="cleaning-item">
-                    <div class="icon">🏠</div>
-                    <h4>가정청소</h4>
-                    <p>일반 가정의 구석구석을 깨끗하게 관리해드립니다</p>
-                </div>
-                
-                <div class="cleaning-item">
-                    <div class="icon">🔑</div>
-                    <h4>원룸청소</h4>
-                    <p>이사 전후 원룸 완벽 클리닝</p>
-                </div>
-                
-                <div class="cleaning-item">
-                    <div class="icon">🏢</div>
-                    <h4>사무실청소</h4>
-                    <p>쾌적한 업무환경을 위한 전문 오피스 청소</p>
-                </div>
-                
-                <div class="cleaning-item">
-                    <div class="icon">🏛️</div>
-                    <h4>기업청소</h4>
-                    <p>대형 기업 시설의 정기 청소 관리</p>
-                </div>
-                
-                <div class="cleaning-item">
-                    <div class="icon">🏭</div>
-                    <h4>공장청소</h4>
-                    <p>산업시설의 특성에 맞춘 맞춤형 청소</p>
-                </div>
-                
-                <div class="cleaning-item">
-                    <div class="icon">🍽️</div>
-                    <h4>식당청소</h4>
-                    <p>위생이 중요한 음식점 전문 청소</p>
-                </div>
-                
-                <div class="cleaning-item">
-                    <div class="icon">⚡</div>
-                    <h4>특수청소</h4>
-                    <p>고난도 청소가 필요한 공간 전문</p>
-                </div>
-                
-                <div class="cleaning-item">
-                    <div class="icon">🏥</div>
-                    <h4>병원청소</h4>
-                    <p>의료시설 특성에 맞는 위생 청소</p>
-                </div>
-                
-                <div class="cleaning-item">
-                    <div class="icon">🏪</div>
-                    <h4>상가청소</h4>
-                    <p>상업시설 청소 및 청결 유지</p>
-                </div>
-                
-                <div class="cleaning-item">
-                    <div class="icon">🏗️</div>
-                    <h4>건설현장청소</h4>
-                    <p>신축 및 리모델링 후 마무리 청소</p>
-                </div>
-                
-                <div class="cleaning-item">
-                    <div class="icon">🏫</div>
-                    <h4>학교청소</h4>
-                    <p>교육시설 청소 및 방역</p>
-                </div>
-                
-                <div class="cleaning-item">
-                    <div class="icon">🏨</div>
-                    <h4>호텔청소</h4>
-                    <p>숙박시설 전문 청소 서비스</p>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <!-- 회사소개 -->
-    <section class="company-section" id="company">
-        <div class="company-inner">
-            <h2>(주)디에이치씨솔루션</h2>
-            <p>시설물관리, 시설물복원, 특수청소, 실내공기질관리 전문기업으로<br>
-            고객의 환경을 개선하고 최상의 청결 상태를 유지하는데 최선을 다하고 있습니다.<br>
-            일본의 특화된 장비와 케미칼을 이용하여 이제껏 경험할 수 없었던<br>
-            새로운 차원의 메인테넌스 솔루션을 제공합니다.</p>
-        </div>
-    </section>
-    
-    <!-- 푸터 -->
-    <footer>
-        <div class="footer-inner">
-            <div class="footer-content">
-                <p><strong>상호:</strong> (주)디에이치씨솔루션 | <strong>대표:</strong> 김동현</p>
-                <p><strong>주소:</strong> 서울특별시 송파구 거여동 604-3 아피체 제8층 제806호</p>
-                <p><strong>TEL:</strong> 02-1666-1757 | <strong>FAX:</strong> 0504-187-0081</p>
-                <p><strong>사업자등록번호:</strong> 140-87-00987</p>
-                <p><strong>개인정보보호정책 책임자:</strong> 박경혜 | <strong>E-mail:</strong> info@dhcsolution.com</p>
-            </div>
-            <div class="footer-bottom">
-                <p>Copyright &copy; DHC Solution. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
+
+    <div data-aos="fade-up">
+      <h3 class="text-2xl font-semibold gold mb-3">🚚 진행 절차</h3>
+      <ol class="space-y-2 text-gray-300">
+        <li>1️⃣ 상담 및 현장견적</li>
+        <li>2️⃣ 정리/폐기/복구 계획 수립</li>
+        <li>3️⃣ 현장작업 및 사진 보고</li>
+        <li>4️⃣ 청소 및 마감 인증</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section class="py-12 text-center gradient-bg" data-aos="zoom-in">
+    <h3 class="text-2xl font-semibold mb-4 gold">📞 빠른 상담</h3>
+    <p class="text-gray-300 mb-6">언제든 문의 주세요. 빠르게 답변드리겠습니다.</p>
+    <div class="flex justify-center space-x-4">
+      <a href="tel:010-1234-5678" 
+         class="btn-main px-5 py-2 rounded-full">전화하기</a>
+      <a href="https://pf.kakao.com/_example" target="_blank" 
+         class="px-5 py-2 rounded-full border border-yellow-400 text-yellow-400">카톡문의</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="text-center py-6 text-gray-500 text-sm">
+    ⓒ 2025 리셋클린. All rights reserved.
+  </footer>
+
+  <script>
+    AOS.init({ duration: 800, once: true });
+  </script>
 </body>
 </html>
