@@ -3,31 +3,53 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>All Reset | 뒷정리 전문 서비스</title>
+  <title>올리셋 All Reset | 뒷정리 전문 서비스</title>
   <style>
     body {
-      font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
+      font-family: 'Pretendard','Noto Sans KR',sans-serif;
       background: #f8fafb;
       color: #2b3a42;
       margin: 0;
       padding: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-height: 100vh;
       overflow-x: hidden;
     }
 
+    /* 상단 고정 영역 */
+    header {
+      position: fixed;
+      top: 0; left: 0; width: 100%;
+      background: white;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      z-index: 999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 12px 0;
+    }
+
+    header img {
+      height: 32px;
+      margin-bottom: 4px;
+    }
+    header h1 {
+      font-size: 14px;
+      font-weight: 600;
+      color: #007b8f;
+      margin: 0;
+    }
+
     .chat-container {
-      width: 100%;
+      margin-top: 90px;
+      padding: 20px;
       max-width: 420px;
-      padding: 70px 20px 120px;
-      box-sizing: border-box;
+      margin-left: auto;
+      margin-right: auto;
+      padding-bottom: 240px;
     }
 
     .bubble {
       background: white;
-      border-radius: 20px;
+      border-radius: 18px;
       padding: 16px 20px;
       margin: 10px 0;
       box-shadow: 0 3px 6px rgba(0,0,0,0.05);
@@ -52,10 +74,13 @@
       color: white;
       border: none;
       border-radius: 20px;
-      padding: 10px 18px;
-      font-size: 15px;
+      padding: 9px 16px;
+      font-size: 14px;
       cursor: pointer;
       transition: background 0.3s;
+    }
+    .choice.selected {
+      background: #00a3b0;
     }
     .choice:hover { background: #005e6b; }
 
@@ -66,9 +91,10 @@
       color: #007b8f;
     }
 
+    /* 하단 상담 버튼 */
     .floating-bar {
       position: fixed;
-      bottom: 0;
+      bottom: 80px;
       left: 0;
       width: 100%;
       background: white;
@@ -94,86 +120,52 @@
     .call-btn { background: linear-gradient(135deg, #007b8f, #00a3b0); }
     .kakao-btn { background: #fae100; color: #3b1e1e; }
 
+    /* 하단 회사정보 */
+    footer {
+      position: fixed;
+      bottom: 0; left: 0;
+      width: 100%;
+      background: #f0f0f0;
+      color: #555;
+      font-size: 11px;
+      text-align: center;
+      line-height: 1.5;
+      padding: 6px 10px;
+      box-sizing: border-box;
+    }
+
   </style>
 </head>
 <body>
 
+  <!-- 상단 로고 & 슬로건 -->
+  <header>
+    <img src="https://via.placeholder.com/120x32?text=All+Reset" alt="올리셋 로고">
+    <h1>당신이 떠난 자리, All Reset 해드립니다.</h1>
+  </header>
+
+  <!-- 대화 컨테이너 -->
   <div class="chat-container" id="chat">
-    <div class="bubble">👋 당신이 떠난 자리,<br><strong>All Reset 해드립니다.</strong></div>
+    <div class="bubble">👋 안녕하세요, <strong>올리셋</strong>입니다.<br>정리할 공간을 알려주세요.</div>
   </div>
 
+  <!-- 하단 상담 버튼 -->
   <div class="floating-bar">
-    <a href="tel:1666-1757" class="float-btn call-btn">📞 전화하기</a>
-    <a href="http://pf.kakao.com/_RklHn/chat" target="_blank" class="float-btn kakao-btn">💬 카카오톡 문의</a>
-
+    <a href="tel:1666-1757" class="float-btn call-btn">📞 전화상담</a>
+    <a href="http://pf.kakao.com/_RklHn" target="_blank" class="float-btn kakao-btn">💬 카카오톡 문의</a>
   </div>
+
+  <!-- 회사정보 -->
+  <footer>
+    상호: (주)디에이치씨솔루션 | 주소: 서울특별시 송파구 거여동 604-3 아피체 제8층 제806호<br>
+    대표: 김동현 | TEL: 02-1666-1757 | FAX: 0504-187-0081<br>
+    사업자등록번호: 140-87-00987 | 개인정보보호책임자: 박경혜<br>
+    E-mail: dhc-solution@naver.com
+  </footer>
 
   <script>
     const chat = document.getElementById('chat');
-
     const steps = [
       {
         q: "🏠 어떤 공간인가요?",
-        a: ["주거공간", "사무실", "공장", "식당", "원룸", "창고", "상가", "빌라", "아파트", "점포"]
-      },
-      {
-        q: "💬 어떤 상황이신가요?",
-        a: ["이사 가요", "폐업했어요", "이민 가요", "집주인이 복구 원해요", "이혼 후 정리", "새 입주 전 청소", "리모델링 전 정리", "퇴거 예정", "철거 준비", "비워야 해요"]
-      },
-      {
-        q: "🧹 어떤 부분을 도와드릴까요?",
-        a: ["전체 정리", "청소만", "철거", "폐기물 처리", "원상복구", "유품 정리", "중고물품 매입", "가전 정리", "마무리 청소"]
-      },
-      {
-        q: "⏰ 언제까지 정리가 필요하신가요?",
-        a: ["오늘 바로", "이번 주 내", "다음 주쯤", "날짜 미정"]
-      }
-    ];
-
-    let answers = [];
-    let stepIndex = 0;
-
-    function showStep(index) {
-      if (index >= steps.length) {
-        showSummary();
-        return;
-      }
-      const step = steps[index];
-      const bubble = document.createElement('div');
-      bubble.className = 'bubble';
-      bubble.innerHTML = step.q;
-
-      const choiceBox = document.createElement('div');
-      choiceBox.className = 'choices';
-
-      step.a.forEach(opt => {
-        const btn = document.createElement('button');
-        btn.className = 'choice';
-        btn.innerText = opt;
-        btn.onclick = () => {
-          answers.push(opt);
-          bubble.style.opacity = 0.6;
-          choiceBox.remove();
-          showStep(index + 1);
-        };
-        choiceBox.appendChild(btn);
-      });
-
-      bubble.appendChild(choiceBox);
-      chat.appendChild(bubble);
-      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-    }
-
-    function showSummary() {
-      const bubble = document.createElement('div');
-      bubble.className = 'bubble summary';
-      bubble.innerHTML = `✅ 요약: ${answers.join(" / ")}<br><br>지금 바로 상담하시겠어요?<br><strong>전화 또는 카카오톡으로 연결됩니다.</strong>`;
-      chat.appendChild(bubble);
-      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-    }
-
-    setTimeout(() => showStep(0), 1200);
-  </script>
-
-</body>
-</html>
+        a: ["주거공간", "사무실", "공장", "식당", "원룸", "상가", "빌라"]()
