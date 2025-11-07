@@ -3,151 +3,42 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>올리셋 - All Reset</title>
+<title>올리셋 | All Reset</title>
 <style>
-  body {
-    margin: 0;
-    font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
-    background-color: #f5f7f8;
-    color: #333;
-    overflow: hidden; /* 전체 스크롤 방지 */
-  }
+  * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Noto Sans KR', sans-serif; }
+  body { background-color: #111; color: #fff; overflow: hidden; }
+  header, footer { position: fixed; left: 0; width: 100%; z-index: 10; }
+  header { top: 0; display: flex; align-items: center; justify-content: center; padding: 10px 0; background: rgba(0,0,0,0.85); border-bottom: 1px solid #333; }
+  header img { height: 28px; margin-right: 8px; }
+  header h1 { font-size: 15px; font-weight: 400; color: #00ffc6; }
 
-  /* 상단 고정 */
-  header {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    background: white;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-    z-index: 1000;
-    text-align: center;
-    padding: 12px 0;
-  }
-
-  header img {
-    width: 140px;
-    vertical-align: middle;
-  }
-
-  header h1 {
-    font-size: 15px;
-    color: #009688;
-    margin: 5px 0 0;
-    font-weight: 600;
-  }
-
-  /* 중앙 스크롤 영역 */
-  main {
-    position: fixed;
-    top: 90px;
-    bottom: 100px;
-    left: 0;
-    right: 0;
-    overflow-y: auto;
-    padding: 10px 20px 40px;
-    text-align: center;
-    scroll-behavior: smooth;
-  }
-
-  .chat-box {
-    background: #fff;
-    border-radius: 20px;
-    padding: 25px 20px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  footer { bottom: 0; background: rgba(0,0,0,0.9); font-size: 11px; color: #bbb; white-space: nowrap; overflow: hidden; display: flex; align-items: center; }
+  .scroll-text {
     display: inline-block;
-    text-align: left;
-    width: 100%;
-    max-width: 380px;
-    transition: opacity 0.4s ease, transform 0.4s ease;
-  }
-
-  .hidden {
-    display: none;
-  }
-
-  .chat-box h2 {
-    font-size: 17px;
-    margin-bottom: 15px;
-    color: #333;
-  }
-
-  .options {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px;
-  }
-
-  .option-button {
-    background-color: #009688;
-    color: white;
-    border: none;
-    padding: 10px 18px;
-    border-radius: 25px;
-    font-size: 15px;
-    transition: all 0.2s;
-    cursor: pointer;
-  }
-
-  .option-button.active {
-    background-color: white;
-    color: #009688;
-    border: 2px solid #009688;
-    box-shadow: 0 0 6px rgba(0,150,136,0.3);
-  }
-
-  /* 하단 고정 */
-  footer {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    background: white;
-    text-align: center;
-    border-top: 1px solid #ddd;
-    padding: 6px 0 5px;
-    overflow: hidden;
-  }
-
-  .footer-buttons {
-    display: flex;
-    justify-content: space-around;
-    margin-bottom: 5px;
-  }
-
-  .footer-buttons a {
-    flex: 1;
-    margin: 5px;
-    padding: 12px 0;
-    border-radius: 10px;
-    text-decoration: none;
-    color: white;
-    font-weight: 600;
-    font-size: 15px;
-  }
-
-  .call-btn { background-color: #00796b; }
-  .kakao-btn { background-color: #fdd835; color: #3a1d1d; }
-
-  /* 회사정보 스크롤 애니메이션 */
-  .company-info-wrapper {
-    width: 100%;
-    overflow: hidden;
-    white-space: nowrap;
-    box-sizing: border-box;
-  }
-
-  .company-info {
-    display: inline-block;
+    animation: scrollText 25s linear infinite;
     padding-left: 100%;
-    animation: scroll-left 30s linear infinite;
-    font-size: 10px;
-    color: #777;
   }
-
-  @keyframes scroll-left {
+  @keyframes scrollText {
     0% { transform: translateX(0); }
     100% { transform: translateX(-100%); }
+  }
+
+  main { position: fixed; top: 60px; bottom: 45px; left: 0; right: 0; overflow-y: auto; text-align: center; padding: 20px; }
+
+  .question { opacity: 0; transform: translateY(30px); transition: all 0.4s ease; }
+  .question.active { opacity: 1; transform: translateY(0); }
+
+  h2 { font-size: 17px; color: #fff; margin-bottom: 20px; }
+  .options { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+  .option { background: #222; border: 1px solid #333; color: #ccc; padding: 10px 15px; border-radius: 25px; font-size: 14px; transition: all 0.2s; cursor: pointer; }
+  .option:hover { border-color: #00ffc6; color: #00ffc6; }
+  .option.active { background: #00ffc6; color: #000; box-shadow: 0 0 10px #00ffc6; }
+
+  .summary { text-align: left; background: #181818; padding: 20px; border-radius: 10px; margin-top: 20px; }
+  .consult-btn {
+    display: block; width: 100%; margin-top: 20px;
+    background: #00ffc6; color: #000; padding: 14px; border-radius: 30px;
+    font-size: 16px; font-weight: 600; text-decoration: none;
   }
 
 </style>
@@ -156,95 +47,103 @@
 
 <header>
   <img src="logo.png" alt="올리셋 로고">
-  <h1>당신이 떠날 자리, 몸만 떠나세요.</h1>
+  <h1>당신이 떠난 자리, All Reset 해드립니다</h1>
 </header>
 
 <main>
-  <!-- 1단계 -->
-  <div id="step1" class="chat-box">
-    <h2>👋 안녕하세요, <strong>올리셋</strong>입니다.<br>도움이 필요한 공간을 알려주세요.</h2>
-    <div class="options">
-      <button class="option-button">주거공간</button>
-      <button class="option-button">사무실</button>
-      <button class="option-button">공장</button>
-      <button class="option-button">식당</button>
-      <button class="option-button">빌라</button>
-      <button class="option-button">창고</button>
-      <button class="option-button">상가</button>
-      <button class="option-button">아파트</button>
-      <button class="option-button">기타 공간</button>
+  <!-- 질문 1 -->
+  <div class="question active" id="q1">
+    <h2>어떤 공간을 정리하실 건가요?</h2>
+    <div class="options" id="space">
+      <div class="option">주거공간</div><div class="option">공장</div><div class="option">사무실</div>
+      <div class="option">식당</div><div class="option">카페</div><div class="option">병원</div>
+      <div class="option">학원</div><div class="option">상가</div><div class="option">창고</div>
+      <div class="option">숙박업소</div><div class="option">건물</div><div class="option">매장</div>
+      <div class="option">오피스텔</div><div class="option">주택</div><div class="option">빌라</div>
+      <div class="option">모텔</div><div class="option">컨테이너</div><div class="option">지식산업센터</div>
+      <div class="option">창업센터</div><div class="option">기타</div>
     </div>
   </div>
 
-  <!-- 2단계 -->
-  <div id="step2" class="chat-box hidden">
-    <h2>📦 어떤 상황이신가요?</h2>
-    <div class="options">
-      <button class="option-button">이사 준비 중이에요</button>
-      <button class="option-button">이민 가요</button>
-      <button class="option-button">집주인이 원상복구 요구</button>
-      <button class="option-button">폐업 정리 중이에요</button>
-      <button class="option-button">이혼 후 정리 중이에요</button>
-      <button class="option-button">공장 이전 준비 중</button>
-      <button class="option-button">세입자 맞이 준비 중</button>
-      <button class="option-button">오랜 공실 정리 중</button>
-      <button class="option-button">기타 상황이에요</button>
+  <!-- 질문 2 -->
+  <div class="question" id="q2">
+    <h2>어떤 상황이신가요?</h2>
+    <div class="options" id="situation">
+      <div class="option">이사</div><div class="option">이혼</div><div class="option">이민</div>
+      <div class="option">폐업</div><div class="option">이전</div><div class="option">철거</div>
+      <div class="option">리모델링</div><div class="option">집주인요청</div><div class="option">계약만료</div>
+      <div class="option">상속정리</div><div class="option">퇴거</div><div class="option">임대종료</div>
+      <div class="option">정리대행</div><div class="option">창고정리</div><div class="option">급정리</div>
+      <div class="option">단기정리</div>
     </div>
   </div>
 
-  <!-- 3단계 -->
-  <div id="step3" class="chat-box hidden">
-    <h2>🧹 어떤 서비스가 필요하신가요?</h2>
-    <div class="options">
-      <button class="option-button">청소</button>
-      <button class="option-button">원상복구</button>
-      <button class="option-button">폐기물 처리</button>
-      <button class="option-button">철거</button>
-      <button class="option-button">가구/가전 정리</button>
-      <button class="option-button">재판매 요청</button>
-      <button class="option-button">기타 서비스</button>
+  <!-- 질문 3 -->
+  <div class="question" id="q3">
+    <h2>어떤 정리를 원하시나요?</h2>
+    <div class="options" id="service">
+      <div class="option">청소</div><div class="option">폐기물처리</div><div class="option">원상복구</div>
+      <div class="option">잔여물품매입</div><div class="option">재판매정리</div><div class="option">전체패키지</div>
     </div>
   </div>
 
-  <!-- 4단계 (완료/연락 안내) -->
-  <div id="step4" class="chat-box hidden">
-    <h2>✅ 정리해드릴 준비가 완료되었습니다!<br>원하시는 상담 방법을 선택해주세요.</h2>
+  <!-- 질문 4 -->
+  <div class="question" id="q4">
+    <h2>지역을 선택해주세요.</h2>
+    <div class="options" id="region">
+      <div class="option">서울</div><div class="option">경기</div><div class="option">인천</div>
+      <div class="option">강원</div><div class="option">충북</div><div class="option">충남</div>
+      <div class="option">전북</div><div class="option">전남</div><div class="option">경북</div>
+      <div class="option">경남</div><div class="option">부산</div><div class="option">대구</div>
+      <div class="option">대전</div><div class="option">광주</div><div class="option">울산</div>
+      <div class="option">세종</div><div class="option">제주</div>
+    </div>
+  </div>
+
+  <!-- 요약 -->
+  <div class="question" id="summary">
+    <h2>선택하신 내용입니다.</h2>
+    <div class="summary" id="summaryText"></div>
+    <a id="smsLink" href="#" class="consult-btn">상담요청</a>
   </div>
 </main>
 
 <footer>
-  <div class="footer-buttons">
-    <a href="tel:16661757" class="call-btn">📞 전화상담</a>
-    <a href="http://pf.kakao.com/_RklHn" class="kakao-btn">💬 카카오톡 문의</a>
-  </div>
-  <div class="company-info-wrapper">
-    <div class="company-info">
-      (주)디에이치씨솔루션 | 서울특별시 송파구 거여동 604-3 아피체 제8층 제806호 | 대표: 김동현 | TEL: 02-1666-1757 | 팩스: 0504-187-0081 | 사업자등록번호: 140-87-00987 | 개인정보책임자: 박경혜 | E-mail: dhc-solution@naver.com
-    </div>
+  <div class="scroll-text">
+    상호: (주)디에이치씨솔루션 | 주소: 서울특별시 송파구 거여동 604-3 아피체 제8층 제806호 | 대표: 김동현 | TEL: 02-1666-1757 | FAX: 0504-187-0081 | 사업자등록번호: 140-87-00987 | 개인정보책임자: 박경혜 | E-mail: dhc-solution@naver.com
   </div>
 </footer>
 
 <script>
-  const steps = [
-    document.getElementById('step1'),
-    document.getElementById('step2'),
-    document.getElementById('step3'),
-    document.getElementById('step4')
-  ];
+const questions = ['space','situation','service','region'];
+let answers = {};
 
-  // 모든 단계 공통 로직
-  for (let i = 0; i < 3; i++) {
-    steps[i].querySelectorAll('.option-button').forEach(btn => {
-      btn.addEventListener('click', () => {
-        steps[i].querySelectorAll('.option-button').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        setTimeout(() => {
-          steps[i].classList.add('hidden');
-          steps[i + 1].classList.remove('hidden');
-        }, 400);
-      });
+questions.forEach((id, i) => {
+  document.querySelectorAll(`#${id} .option`).forEach(opt => {
+    opt.addEventListener('click', () => {
+      document.querySelectorAll(`#${id} .option`).forEach(o => o.classList.remove('active'));
+      opt.classList.add('active');
+      answers[id] = opt.textContent;
+      setTimeout(() => {
+        document.getElementById(`q${i+1}`).classList.remove('active');
+        document.getElementById(`q${i+2}`)?.classList.add('active');
+        if(i===3){ showSummary(); }
+      }, 300);
     });
-  }
+  });
+});
+
+function showSummary(){
+  const t = `
+  <p>공간 : ${answers.space}</p>
+  <p>상황 : ${answers.situation}</p>
+  <p>정리 : ${answers.service}</p>
+  <p>지역 : ${answers.region}</p>`;
+  document.getElementById('summaryText').innerHTML = t;
+
+  const smsBody = `공간:${answers.space}%0A상황:${answers.situation}%0A정리:${answers.service}%0A지역:${answers.region}`;
+  document.getElementById('smsLink').href = `sms:01057138417?body=${smsBody}`;
+}
 </script>
 
 </body>
