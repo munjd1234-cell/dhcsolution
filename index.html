@@ -106,6 +106,7 @@
     text-align: center;
     border-top: 1px solid #ddd;
     padding: 6px 0 5px;
+    overflow: hidden;
   }
 
   .footer-buttons {
@@ -128,14 +129,27 @@
   .call-btn { background-color: #00796b; }
   .kakao-btn { background-color: #fdd835; color: #3a1d1d; }
 
+  /* 회사정보 스크롤 애니메이션 */
+  .company-info-wrapper {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    box-sizing: border-box;
+  }
+
   .company-info {
+    display: inline-block;
+    padding-left: 100%;
+    animation: scroll-left 30s linear infinite;
     font-size: 10px;
     color: #777;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    padding: 0 10px;
   }
+
+  @keyframes scroll-left {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-100%); }
+  }
+
 </style>
 </head>
 <body>
@@ -191,6 +205,11 @@
       <button class="option-button">기타 서비스</button>
     </div>
   </div>
+
+  <!-- 4단계 (완료/연락 안내) -->
+  <div id="step4" class="chat-box hidden">
+    <h2>✅ 정리해드릴 준비가 완료되었습니다!<br>원하시는 상담 방법을 선택해주세요.</h2>
+  </div>
 </main>
 
 <footer>
@@ -198,46 +217,34 @@
     <a href="tel:16661757" class="call-btn">📞 전화상담</a>
     <a href="http://pf.kakao.com/_RklHn" class="kakao-btn">💬 카카오톡 문의</a>
   </div>
-  <div class="company-info">
-    (주)디에이치씨솔루션 | 서울특별시 송파구 거여동 604-3 아피체 제8층 제806호 | 대표: 김동현 | TEL: 02-1666-1757 | 팩스: 0504-187-0081 | 사업자등록번호: 140-87-00987 | 개인정보책임자: 박경혜 | E-mail: dhc-solution@naver.com
+  <div class="company-info-wrapper">
+    <div class="company-info">
+      (주)디에이치씨솔루션 | 서울특별시 송파구 거여동 604-3 아피체 제8층 제806호 | 대표: 김동현 | TEL: 02-1666-1757 | 팩스: 0504-187-0081 | 사업자등록번호: 140-87-00987 | 개인정보책임자: 박경혜 | E-mail: dhc-solution@naver.com
+    </div>
   </div>
 </footer>
 
 <script>
-  const step1 = document.getElementById('step1');
-  const step2 = document.getElementById('step2');
-  const step3 = document.getElementById('step3');
+  const steps = [
+    document.getElementById('step1'),
+    document.getElementById('step2'),
+    document.getElementById('step3'),
+    document.getElementById('step4')
+  ];
 
-  // 1단계: 한 개만 선택 후 다음으로 이동
-  step1.querySelectorAll('.option-button').forEach(btn => {
-    btn.addEventListener('click', () => {
-      step1.querySelectorAll('.option-button').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      setTimeout(() => {
-        step1.classList.add('hidden');
-        step2.classList.remove('hidden');
-      }, 400);
+  // 모든 단계 공통 로직
+  for (let i = 0; i < 3; i++) {
+    steps[i].querySelectorAll('.option-button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        steps[i].querySelectorAll('.option-button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        setTimeout(() => {
+          steps[i].classList.add('hidden');
+          steps[i + 1].classList.remove('hidden');
+        }, 400);
+      });
     });
-  });
-
-  // 2단계: 클릭 시 피드백 + 다음 단계 이동
-  step2.querySelectorAll('.option-button').forEach(btn => {
-    btn.addEventListener('click', () => {
-      step2.querySelectorAll('.option-button').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      setTimeout(() => {
-        step2.classList.add('hidden');
-        step3.classList.remove('hidden');
-      }, 400);
-    });
-  });
-
-  // 3단계: 클릭 피드백만
-  step3.querySelectorAll('.option-button').forEach(btn => {
-    btn.addEventListener('click', () => {
-      btn.classList.toggle('active');
-    });
-  });
+  }
 </script>
 
 </body>
