@@ -10,7 +10,7 @@
     font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
     background-color: #f5f7f8;
     color: #333;
-    overflow-x: hidden;
+    overflow: hidden; /* 전체 스크롤 방지 */
   }
 
   /* 상단 고정 */
@@ -37,12 +37,17 @@
     font-weight: 600;
   }
 
+  /* 중앙 스크롤 영역 */
   main {
-    margin-top: 110px;
-    margin-bottom: 120px;
+    position: fixed;
+    top: 90px;
+    bottom: 100px;
+    left: 0;
+    right: 0;
+    overflow-y: auto;
+    padding: 10px 20px 40px;
     text-align: center;
-    padding: 0 20px;
-    transition: all 0.5s ease;
+    scroll-behavior: smooth;
   }
 
   .chat-box {
@@ -54,13 +59,11 @@
     text-align: left;
     width: 100%;
     max-width: 380px;
-    transition: opacity 0.5s ease, transform 0.5s ease;
+    transition: opacity 0.4s ease, transform 0.4s ease;
   }
 
-  .chat-box.hidden {
-    opacity: 0;
-    transform: translateY(-10px);
-    pointer-events: none;
+  .hidden {
+    display: none;
   }
 
   .chat-box h2 {
@@ -133,11 +136,6 @@
     text-overflow: ellipsis;
     padding: 0 10px;
   }
-
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(15px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
 </style>
 </head>
 <body>
@@ -156,15 +154,10 @@
       <button class="option-button">사무실</button>
       <button class="option-button">공장</button>
       <button class="option-button">식당</button>
-      <button class="option-button">원룸</button>
-      <button class="option-button">상가</button>
       <button class="option-button">빌라</button>
-      <button class="option-button">아파트</button>
       <button class="option-button">창고</button>
-      <button class="option-button">시설물</button>
-      <button class="option-button">야외공간</button>
-      <button class="option-button">공연장</button>
-      <button class="option-button">촬영장</button>
+      <button class="option-button">상가</button>
+      <button class="option-button">아파트</button>
       <button class="option-button">기타 공간</button>
     </div>
   </div>
@@ -176,13 +169,26 @@
       <button class="option-button">이사 준비 중이에요</button>
       <button class="option-button">이민 가요</button>
       <button class="option-button">집주인이 원상복구 요구</button>
-      <button class="option-button">폐업 정리 중</button>
-      <button class="option-button">리모델링 예정</button>
-      <button class="option-button">공장 이전</button>
-      <button class="option-button">이혼 후 정리</button>
-      <button class="option-button">오랜 공실 정리</button>
-      <button class="option-button">새 세입자 맞이</button>
-      <button class="option-button">기타 상황</button>
+      <button class="option-button">폐업 정리 중이에요</button>
+      <button class="option-button">이혼 후 정리 중이에요</button>
+      <button class="option-button">공장 이전 준비 중</button>
+      <button class="option-button">세입자 맞이 준비 중</button>
+      <button class="option-button">오랜 공실 정리 중</button>
+      <button class="option-button">기타 상황이에요</button>
+    </div>
+  </div>
+
+  <!-- 3단계 -->
+  <div id="step3" class="chat-box hidden">
+    <h2>🧹 어떤 서비스가 필요하신가요?</h2>
+    <div class="options">
+      <button class="option-button">청소</button>
+      <button class="option-button">원상복구</button>
+      <button class="option-button">폐기물 처리</button>
+      <button class="option-button">철거</button>
+      <button class="option-button">가구/가전 정리</button>
+      <button class="option-button">재판매 요청</button>
+      <button class="option-button">기타 서비스</button>
     </div>
   </div>
 </main>
@@ -198,22 +204,38 @@
 </footer>
 
 <script>
-  const step1Buttons = document.querySelectorAll('#step1 .option-button');
   const step1 = document.getElementById('step1');
   const step2 = document.getElementById('step2');
+  const step3 = document.getElementById('step3');
 
-  step1Buttons.forEach(btn => {
+  // 1단계: 한 개만 선택 후 다음으로 이동
+  step1.querySelectorAll('.option-button').forEach(btn => {
     btn.addEventListener('click', () => {
-      step1Buttons.forEach(b => b.classList.remove('active'));
+      step1.querySelectorAll('.option-button').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-
-      // 1초 후 다음 질문으로 이동
       setTimeout(() => {
         step1.classList.add('hidden');
         step2.classList.remove('hidden');
-        step2.style.animation = 'fadeIn 0.6s ease forwards';
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }, 700);
+      }, 400);
+    });
+  });
+
+  // 2단계: 클릭 시 피드백 + 다음 단계 이동
+  step2.querySelectorAll('.option-button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      step2.querySelectorAll('.option-button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      setTimeout(() => {
+        step2.classList.add('hidden');
+        step3.classList.remove('hidden');
+      }, 400);
+    });
+  });
+
+  // 3단계: 클릭 피드백만
+  step3.querySelectorAll('.option-button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      btn.classList.toggle('active');
     });
   });
 </script>
