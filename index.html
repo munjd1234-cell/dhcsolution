@@ -13,21 +13,19 @@
     overflow: hidden;
   }
 
-  /* 상단 로고 고정 영역 */
+  /* 상단 로고 고정 */
   header {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     background: #fff;
-    color: #000;
     text-align: center;
     padding: 10px 0;
     z-index: 1000;
   }
   header img {
     height: 40px;
-    vertical-align: middle;
   }
   header h2 {
     margin: 5px 0 0;
@@ -35,13 +33,12 @@
     color: #333;
   }
 
-  /* 메인 콘텐츠 */
+  /* 메인 영역 */
   main {
     margin-top: 100px;
-    margin-bottom: 140px;
-    height: calc(100vh - 240px);
+    margin-bottom: 130px;
+    height: calc(100vh - 230px);
     overflow-y: auto;
-    scroll-behavior: smooth;
     text-align: center;
   }
 
@@ -84,10 +81,10 @@
     box-shadow: 0 0 8px #00bfa5;
   }
 
-  /* 하단 고정버튼 영역 */
+  /* 하단 버튼 */
   .fixed-buttons {
     position: fixed;
-    bottom: 50px;
+    bottom: 35px;
     left: 0;
     width: 100%;
     display: flex;
@@ -106,7 +103,7 @@
     cursor: pointer;
   }
 
-  /* 회사 정보 영역 */
+  /* 회사정보 */
   footer {
     position: fixed;
     bottom: 0;
@@ -121,12 +118,12 @@
 
   .scroll-text {
     display: inline-block;
-    animation: marquee 30s linear infinite;
-    padding-left: 100%;
+    animation: marquee 25s linear infinite;
+    padding-left: 0;
   }
 
   @keyframes marquee {
-    0% { transform: translateX(0%); }
+    0% { transform: translateX(0); }
     100% { transform: translateX(-100%); }
   }
 </style>
@@ -209,7 +206,7 @@
     <div class="question" id="result">
       <h3>요청 내용 요약</h3>
       <p id="summary"></p>
-      <button id="sendSMS">상담요청 문자 보내기</button>
+      <button id="sendSMS">📩 문자로 상담요청 보내기</button>
     </div>
   </main>
 
@@ -221,7 +218,7 @@
   <footer>
     <div class="scroll-text">
       상호: (주)디에이치씨솔루션 | 주소: 서울특별시 송파구 거여동 604-3 아피체 제8층 제806호 | 대표: 김동현 | TEL: 02-1666-1757 | 
-      상담정보: 팩스 0504-187-0081 | 사업자등록번호: 140-87-00987 | 개인정보보호책임자: 박경혜 | E-mail: dhc-solution@naver.com
+      팩스: 0504-187-0081 | 사업자등록번호: 140-87-00987 | 개인정보책임자: 박경혜 | E-mail: dhc-solution@naver.com
     </div>
   </footer>
 
@@ -233,18 +230,9 @@
     document.querySelectorAll('.option-button').forEach(btn => {
       btn.addEventListener('click', () => {
         const parent = btn.closest('.question');
-        const idx = Array.from(questions).indexOf(parent);
-        const singleChoice = (idx === 0 || idx === 2 || idx === 3); // 1,3,4번 단일 선택
-
-        if (singleChoice) {
-          parent.querySelectorAll('.option-button').forEach(b => b.classList.remove('active'));
-        }
-        btn.classList.toggle('active');
-
-        // 자동 다음화면 이동
-        if (singleChoice) {
-          setTimeout(() => showNext(), 200);
-        }
+        parent.querySelectorAll('.option-button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        setTimeout(() => showNext(), 200);
       });
     });
 
@@ -254,9 +242,7 @@
       if (current < questions.length) {
         questions[current].classList.add('active');
       }
-      if (current === questions.length - 1) {
-        summarize();
-      }
+      if (current === questions.length - 1) summarize();
     }
 
     function summarize() {
@@ -264,8 +250,7 @@
       document.querySelectorAll('.option-button.active').forEach(btn => {
         answers.push(btn.textContent);
       });
-      document.getElementById('summary').textContent =
-        `선택하신 내용: ${answers.join(', ')}`;
+      document.getElementById('summary').textContent = `선택하신 내용: ${answers.join(', ')}`;
     }
 
     document.getElementById('sendSMS').addEventListener('click', () => {
