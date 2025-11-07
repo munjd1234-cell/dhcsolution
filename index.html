@@ -1,293 +1,309 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>올리셋 All Reset</title>
 <style>
-body {
-  margin: 0;
-  padding: 0;
-  background-color: #111;
-  color: #fff;
-  font-family: 'Pretendard', sans-serif;
-  overflow: hidden;
-}
-header {
-  background: #fff;
-  text-align: center;
-  padding: 20px 10px;
-}
-header img {
-  width: 180px;
-  display: block;
-  margin: 0 auto;
-}
-header h2 {
-  font-size: 18px;
-  color: #000;
-  margin-top: 10px;
-}
-#chat-container {
-  height: calc(100vh - 160px);
-  overflow-y: auto;
-  scroll-behavior: smooth;
-  padding: 0 15px;
-}
-.question {
-  display: none;
-  text-align: center;
-  margin-top: 60px;
-}
-.question.active {
-  display: block;
-}
-.question h3 {
-  font-size: 20px;
-  margin-bottom: 25px;
-}
-.options {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 10px;
-}
-.option {
-  background: #222;
-  color: #fff;
-  padding: 10px 18px;
-  border-radius: 25px;
-  cursor: pointer;
-  border: 1px solid #333;
-  transition: all 0.2s ease;
-}
-.option:hover, .option.selected {
-  background: #007aff;
-  border-color: #007aff;
-}
-#result {
-  display: none;
-  text-align: center;
-  margin-top: 50px;
-}
-#result h3 {
-  font-size: 20px;
-  margin-bottom: 20px;
-}
-button.send-btn {
-  background: linear-gradient(90deg, #007aff, #00d4ff);
-  border: none;
-  color: #fff;
-  padding: 14px 30px;
-  border-radius: 40px;
-  font-size: 16px;
-  cursor: pointer;
-  margin-top: 20px;
-  transition: all 0.3s ease;
-}
-button.send-btn:hover {
-  transform: scale(1.05);
-}
-footer {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  background: #000;
-  color: #aaa;
-  font-size: 11px;
-  white-space: nowrap;
-  overflow: hidden;
-  height: 40px;
-  display: flex;
-  align-items: center;
-}
-.marquee {
-  display: inline-block;
-  padding-left: 100%;
-  animation: scrollText 30s linear infinite;
-}
-@keyframes scrollText {
-  from { transform: translateX(0); }
-  to { transform: translateX(-100%); }
-}
-.fixed-buttons {
-  position: fixed;
-  bottom: 40px;
-  width: 100%;
-  background: #111;
-  text-align: center;
-  padding: 5px 0;
-}
-.fixed-buttons a {
-  color: #fff;
-  text-decoration: none;
-  display: inline-block;
-  margin: 0 10px;
-  padding: 8px 15px;
-  background: #007aff;
-  border-radius: 25px;
-  font-size: 14px;
-}
+  body {
+    margin: 0;
+    font-family: 'Pretendard', sans-serif;
+    background-color: #111;
+    color: #fff;
+    overflow: hidden;
+  }
+
+  /* 상단 로고 고정 */
+  header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: #fff;
+    text-align: center;
+    padding: 10px 0;
+    z-index: 1000;
+  }
+  header img {
+    height: 40px;
+  }
+  header h2 {
+    margin: 5px 0 0;
+    font-size: 14px;
+    color: #333;
+  }
+
+  /* 메인 영역 */
+  main {
+    margin-top: 100px;
+    margin-bottom: 75px; /* (변경) 하단 버튼 영역에 맞게 축소 */
+    height: calc(100vh - 175px); /* (변경) 100(header) + 75(bottom) */
+    overflow-y: auto;
+    text-align: center;
+  }
+
+  .question {
+    display: none;
+    animation: fadeIn 0.3s ease-in-out;
+  }
+  .question.active {
+    display: block;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .options {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 15px;
+    padding: 0 10px; /* 좌우 여백 추가 */
+  }
+
+  .option-button {
+    background-color: #222;
+    border: 1px solid #444;
+    color: #ccc;
+    padding: 10px 18px;
+    border-radius: 30px;
+    font-size: 15px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+  }
+
+  .option-button.active {
+    background-color: #00bfa5;
+    color: #fff;
+    border: none;
+    box-shadow: 0 0 8px #00bfa5;
+  }
+
+  /* (신규) 결과 요약 텍스트 */
+  #summary {
+    line-height: 1.6;
+    padding: 0 20px;
+    color: #ddd;
+  }
+
+  /* (신규) SMS 버튼 스타일 */
+  #sendSMS {
+    background: #00bfa5;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    padding: 12px 25px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background-color 0.2s ease;
+  }
+  #sendSMS:hover {
+    background-color: #00a892;
+  }
+
+
+  /* 하단 버튼 */
+  .fixed-buttons {
+    position: fixed;
+    bottom: 20px; /* (변경) 35px -> 20px, footer와의 간격 축소 */
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    z-index: 999;
+  }
+
+  .fixed-buttons button {
+    background: #00bfa5;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    padding: 12px 20px;
+    font-size: 15px;
+    cursor: pointer;
+  }
+
+  /* 회사정보 */
+  footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: #111;
+    color: #888;
+    font-size: 11px;
+    white-space: nowrap;
+    overflow: hidden;
+    padding: 5px 0; /* (추가) 상하 여백 */
+  }
+
+  .scroll-text {
+    display: inline-block;
+    animation: marquee 25s linear infinite;
+    padding-left: 0;
+  }
+
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-100%); }
+  }
 </style>
 </head>
+
 <body>
+  <header>
+    <img src="logo.png" alt="올리셋 로고" />
+    <h2>당신이 떠난 자리, 몸만 떠나세요</h2>
+  </header>
 
-<header>
-  <img src="logo.png" alt="올리셋 로고">
-  <h2>당신이 떠난 자리, 몸만 떠나세요</h2>
-</header>
+  <main>
+        <div class="question active" id="q1">
+      <h3>어떤 공간을 정리하시겠어요?</h3>
+      <div class="options">
+        <button class="option-button">주거공간</button>
+        <button class="option-button">공장</button>
+        <button class="option-button">사무실</button>
+        <button class="option-button">식당</button>
+        <button class="option-button">창고</button>
+        <button class="option-button">학원</button>
+        <button class="option-button">병원</button>
+        <button class="option-button">상가</button>
+      </div>
+    </div>
 
-<div id="chat-container">
-  <!-- 질문 1 -->
-  <div class="question active" id="q1">
-    <h3>어떤 공간을 정리하시나요?</h3>
-    <div class="options">
-      <div class="option">주거공간</div>
-      <div class="option">사무실</div>
-      <div class="option">식당</div>
-      <div class="option">공장</div>
-      <div class="option">창고</div>
-      <div class="option">매장</div>
-      <div class="option">학원</div>
-      <div class="option">병원</div>
-      <div class="option">숙박업소</div>
-      <div class="option">기타</div>
-    </div>
-  </div>
+        <div class="question" id="q2">
+      <h3>어떤 상황인가요?</h3>
+      <div class="options">
+        <button class="option-button">이사</button>
+        <button class="option-button">이혼</button>
+        <button class="option-button">이민</button>
+        <button class="option-button">폐업</button>
+        <button class="option-button">이전</button>
+        <button class="option-button">리모델링</button>
+        <button class="option-button">철거</button>
+      </div>
+    </div>
 
-  <!-- 질문 2 -->
-  <div class="question" id="q2">
-    <h3>어떤 상황인가요?</h3>
-    <div class="options">
-      <div class="option">이사 가요</div>
-      <div class="option">이사 와요</div>
-      <div class="option">계약 종료</div>
-      <div class="option">원상복구</div>
-      <div class="option">폐업 정리</div>
-      <div class="option">리모델링 전</div>
-      <div class="option">새로 시작</div>
-      <div class="option">정리 정돈</div>
-      <div class="option">이민 준비</div>
-      <div class="option">기타</div>
-    </div>
-  </div>
+        <div class="question" id="q3">
+      <h3>어떤 작업이 필요하신가요?</h3>
+      <div class="options">
+        <button class="option-button">청소</button>
+        <button class="option-button">폐기물 처리</button>
+        <button class="option-button">정리정돈</button>
+        <button class="option-button">원상복구</button>
+        <button class="option-button">재판매</button>
+        <button class="option-button">전체 일괄정리</button>
+      </div>
+    </div>
 
-  <!-- 질문 3 -->
-  <div class="question" id="q3">
-    <h3>정리 후 어떤 상태를 원하시나요?</h3>
-    <div class="options">
-      <div class="option">완전 철거</div>
-      <div class="option">청소 포함</div>
-      <div class="option">원상 복구</div>
-      <div class="option">부분 정리</div>
-      <div class="option">가구 이동 포함</div>
-      <div class="option">폐기물 처리 포함</div>
-      <div class="option">깔끔하게만</div>
-    </div>
-  </div>
+        <div class="question" id="q4">
+      <h3>규모를 선택해주세요</h3>
+      <div class="options">
+        <button class="option-button">10평 미만</button>
+        <button class="option-button">20평 미만</button>
+        <button class="option-button">30평 미만</button>
+        <button class="option-button">50평 미만</button>
+        <button class="option-button">100평 미만</button>
+        <button class="option-button">500평 미만</button>
+        <button class="option-button">1000평 미만</button>
+        <button class="option-button">1000평 이상</button>
+        <button class="option-button">소규모</button>
+        <button class="option-button">대규모</button>
+        <button class="option-button">정기적인</button>
+        <button class="option-button">잘 모름</button>
+      </div>
+    </div>
 
-  <!-- 질문 4 (추가된 규모 선택) -->
-  <div class="question" id="q4">
-    <h3>정리할 공간의 규모를 알려주세요</h3>
-    <div class="options">
-      <div class="option">10평 미만</div>
-      <div class="option">20평 미만</div>
-      <div class="option">30평 미만</div>
-      <div class="option">50평 미만</div>
-      <div class="option">100평 미만</div>
-      <div class="option">500평 미만</div>
-      <div class="option">1000평 미만</div>
-      <div class="option">1000평 이상</div>
-      <div class="option">소규모</div>
-      <div class="option">대규모</div>
-      <div class="option">정기적인</div>
-      <div class="option">잘 모름</div>
-    </div>
-  </div>
+        <div class="question" id="q5">
+      <h3>지역을 선택해주세요</h3>
+      <div class="options">
+        <button class="option-button">서울</button>
+        <button class="option-button">경기</button>
+        <button class="option-button">인천</button>
+        <button class="option-button">강원</button>
+        <button class="option-button">충북</button>
+        <button class="option-button">충남</button>
+        <button class="option-button">전북</button>
+        <button class="option-button">전남</button>
+        <button class="option-button">경북</button>
+        <button class="option-button">경남</button>
+        <button class="option-button">부산</button>
+        <button class="option-button">대구</button>
+        <button class="option-button">광주</button>
+        <button class="option-button">대전</button>
+        <button class="option-button">울산</button>
+        <button class="option-button">세종</button>
+        <button class="option-button">제주</button>
+      </div>
+    </div>
 
-  <!-- 질문 5 -->
-  <div class="question" id="q5">
-    <h3>지역을 선택해주세요</h3>
-    <div class="options">
-      <div class="option">서울</div>
-      <div class="option">경기</div>
-      <div class="option">인천</div>
-      <div class="option">부산</div>
-      <div class="option">대전</div>
-      <div class="option">대구</div>
-      <div class="option">광주</div>
-      <div class="option">울산</div>
-      <div class="option">세종</div>
-      <div class="option">강원</div>
-      <div class="option">충북</div>
-      <div class="option">충남</div>
-      <div class="option">전북</div>
-      <div class="option">전남</div>
-      <div class="option">경북</div>
-      <div class="option">경남</div>
-      <div class="option">제주</div>
-    </div>
-  </div>
+        <div class="question" id="result">
+      <h3>요청 내용 요약</h3>
+      <p id="summary">선택하신 내용: </p>
+      <button id="sendSMS">📩 문자로 상담요청 보내기</button>
+    </div>
+  </main>
 
-  <!-- 결과 -->
-  <div id="result">
-    <h3>고객님의 요청이 정리되었습니다.</h3>
-    <p id="summary"></p>
-    <button class="send-btn" onclick="sendSMS()">📩 문자로 상담요청 보내기</button>
-  </div>
-</div>
+  <div class="fixed-buttons">
+    <button onclick="window.location.href='tel:16661757'">📞 전화하기</button>
+      </div>
 
-<div class="fixed-buttons">
-  <a href="tel:16661757">📞 전화 상담</a>
-  <a href="http://pf.kakao.com/_RklHn/chat" target="_blank">💬 카카오톡 문의</a>
-</div>
+  <footer>
+    <div class="scroll-text">
+      상호: (주)디에이치씨솔루션 | 주소: 서울특별시 송파구 거여동 604-3 아피체 제8층 제806호 | 대표: 김동현 | TEL: 02-1666-1757 | 
+      팩스: 0504-187-0081 | 사업자등록번호: 140-87-00987 | 개인정보책임자: 박경혜 | E-mail: dhc-solution@naver.com
+    </div>
+  </footer>
 
-<footer>
-  <div class="marquee">(주)디에이치씨솔루션 | 서울특별시 송파구 거여동 604-3 아피체 제8층 제806호 | 대표: 김동현 | TEL: 02-1666-1757 | FAX: 0504-187-0081 | 사업자등록번호: 140-87-00987 | 개인정보책임자: 박경혜 | E-mail: dhc-solution@naver.com</div>
-</footer>
+  <script>
+    const questions = document.querySelectorAll('.question');
+    let current = 0;
+    let answers = [];
 
-<script>
-let current = 1;
-const total = 5;
-const answers = {};
+    document.querySelectorAll('.option-button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const parent = btn.closest('.question');
+        parent.querySelectorAll('.option-button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        setTimeout(() => showNext(), 200);
+      });
+    });
 
-document.querySelectorAll('.option').forEach(option => {
-  option.addEventListener('click', () => {
-    const parent = option.closest('.question');
-    const qid = parent.id;
-    parent.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
-    option.classList.add('selected');
-    answers[qid] = option.innerText;
-    if (current < total) {
-      document.getElementById(`q${current}`).classList.remove('active');
-      current++;
-      document.getElementById(`q${current}`).classList.add('active');
-    } else {
-      showResult();
-    }
-  });
-});
+    function showNext() {
+      if (current < questions.length) {
+        questions[current].classList.remove('active');
+      }
+      current++;
+      if (current < questions.length) {
+        questions[current].classList.add('active');
+      }
+      // (변경) 마지막 질문인지 확인하는 로직 수정
+      if (current === questions.length - 1) { 
+        summarize();
+      }
+    }
 
-function showResult() {
-  document.getElementById(`q${current}`).classList.remove('active');
-  const summary = `
-    공간: ${answers.q1}<br>
-    상황: ${answers.q2}<br>
-    상태: ${answers.q3}<br>
-    규모: ${answers.q4}<br>
-    지역: ${answers.q5}
-  `;
-  document.getElementById('summary').innerHTML = summary;
-  document.getElementById('result').style.display = 'block';
-}
+    function summarize() {
+      answers = [];
+      // (변경) result 전까지의 모든 active 버튼 수집
+      document.querySelectorAll('.question:not(#result) .option-button.active').forEach(btn => {
+        answers.push(btn.textContent);
+      });
+      document.getElementById('summary').textContent = `선택하신 내용: ${answers.join(', ')}`;
+    }
 
-function sendSMS() {
-  const text = encodeURIComponent(
-    `[올리셋 상담요청]\n공간: ${answers.q1}\n상황: ${answers.q2}\n상태: ${answers.q3}\n규모: ${answers.q4}\n지역: ${answers.q5}`
-  );
-  window.location.href = `sms:01057138417?body=${text}`;
-}
-</script>
-
+    document.getElementById('sendSMS').addEventListener('click', () => {
+      // 요약본을 다시 생성하여 최신 정보 반영
+      summarize(); 
+      const text = encodeURIComponent(`[올리셋 상담요청]\n${answers.join(', ')}`);
+      window.location.href = `sms:01057138417?body=${text}`;
+    });
+  </script>
 </body>
 </html>
