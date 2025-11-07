@@ -116,7 +116,7 @@
     100% { transform: translateX(-100%); }
   }
 
-  #sendSMS, #sendKakao {
+  #sendSMS {
     background-color: #00bfa5;
     color: #fff;
     border: none;
@@ -126,7 +126,6 @@
     cursor: pointer;
     margin: 10px;
   }
-
 </style>
 </head>
 
@@ -140,84 +139,31 @@
     <!-- Q1 -->
     <div class="question active" id="q1">
       <h3>어떤 공간을 정리하시겠어요?</h3>
-      <div class="options">
-        <button class="option-button">주거공간</button>
-        <button class="option-button">공장</button>
-        <button class="option-button">사무실</button>
-        <button class="option-button">식당</button>
-        <button class="option-button">창고</button>
-        <button class="option-button">병원</button>
-        <button class="option-button">상가</button>
-      </div>
+      <div class="options" id="opt1"></div>
     </div>
 
     <!-- Q2 -->
     <div class="question" id="q2">
       <h3>어떤 상황인가요?</h3>
-      <div class="options">
-        <button class="option-button">이사</button>
-        <button class="option-button">이혼</button>
-        <button class="option-button">이민</button>
-        <button class="option-button">폐업</button>
-        <button class="option-button">이전</button>
-        <button class="option-button">철거</button>
-      </div>
+      <div class="options" id="opt2"></div>
     </div>
 
     <!-- Q3 -->
     <div class="question" id="q3">
       <h3>어떤 작업이 필요하신가요?</h3>
-      <div class="options">
-        <button class="option-button">청소</button>
-        <button class="option-button">폐기물 처리</button>
-        <button class="option-button">정리정돈</button>
-        <button class="option-button">원상복구</button>
-        <button class="option-button">재판매</button>
-        <button class="option-button">전체 일괄정리</button>
-      </div>
+      <div class="options" id="opt3"></div>
     </div>
 
     <!-- Q4: 규모 -->
     <div class="question" id="q4">
       <h3>규모를 선택해주세요</h3>
-      <div class="options">
-        <button class="option-button">10평 미만</button>
-        <button class="option-button">20평 미만</button>
-        <button class="option-button">30평 미만</button>
-        <button class="option-button">50평 미만</button>
-        <button class="option-button">100평 미만</button>
-        <button class="option-button">500평 미만</button>
-        <button class="option-button">1000평 미만</button>
-        <button class="option-button">1000평 이상</button>
-        <button class="option-button">소규모</button>
-        <button class="option-button">대규모</button>
-        <button class="option-button">정기적인</button>
-        <button class="option-button">잘 모름</button>
-      </div>
+      <div class="options" id="opt4"></div>
     </div>
 
     <!-- Q5: 지역 -->
     <div class="question" id="q5">
       <h3>지역을 선택해주세요</h3>
-      <div class="options">
-        <button class="option-button">서울</button>
-        <button class="option-button">경기</button>
-        <button class="option-button">인천</button>
-        <button class="option-button">강원</button>
-        <button class="option-button">충북</button>
-        <button class="option-button">충남</button>
-        <button class="option-button">전북</button>
-        <button class="option-button">전남</button>
-        <button class="option-button">경북</button>
-        <button class="option-button">경남</button>
-        <button class="option-button">부산</button>
-        <button class="option-button">대구</button>
-        <button class="option-button">광주</button>
-        <button class="option-button">대전</button>
-        <button class="option-button">울산</button>
-        <button class="option-button">세종</button>
-        <button class="option-button">제주</button>
-      </div>
+      <div class="options" id="opt5"></div>
     </div>
 
     <!-- 결과 -->
@@ -225,13 +171,13 @@
       <h3>요청 내용 요약</h3>
       <p id="summary"></p>
       <button id="sendSMS">📩 문자로 상담 요청</button>
-      <button id="sendKakao">💬 카카오톡 문의</button>
-      <p style="font-size:12px; color:#888;">※ 카카오톡 문의 시, 내용이 자동 복사되며 바로 붙여넣기 하시면 됩니다.</p>
     </div>
   </main>
 
+  <!-- 전화 & 카카오 -->
   <div class="fixed-buttons">
     <button onclick="window.location.href='tel:16661757'">📞 전화하기</button>
+    <button onclick="window.location.href='https://open.kakao.com/o/sSjtKV0h'">💬 카카오톡</button>
   </div>
 
   <footer>
@@ -246,6 +192,27 @@
     let current = 0;
     let answers = [];
 
+    // 버튼 자동 생성용 데이터
+    const data = {
+      opt1: ['주거공간','공장','사무실','식당','창고','병원','상가'],
+      opt2: ['이사','이혼','이민','폐업','이전','철거'],
+      opt3: ['청소','폐기물 처리','정리정돈','원상복구','재판매','전체 일괄정리'],
+      opt4: ['10평 미만','20평 미만','30평 미만','50평 미만','100평 미만','500평 미만','1000평 미만','1000평 이상','소규모','대규모','정기적인','잘 모름'],
+      opt5: ['서울','경기','인천','강원','충북','충남','전북','전남','경북','경남','부산','대구','광주','대전','울산','세종','제주']
+    };
+
+    // 반복되는 버튼 생성 코드
+    Object.keys(data).forEach(id => {
+      const container = document.getElementById(id);
+      data[id].forEach(text => {
+        const btn = document.createElement('button');
+        btn.className = 'option-button';
+        btn.textContent = text;
+        container.appendChild(btn);
+      });
+    });
+
+    // 클릭 이벤트
     document.querySelectorAll('.option-button').forEach(btn => {
       btn.addEventListener('click', () => {
         const parent = btn.closest('.question');
@@ -276,15 +243,6 @@
     document.getElementById('sendSMS').addEventListener('click', () => {
       const text = encodeURIComponent(`[올리셋 상담요청]\n${answers.join(', ')}`);
       window.location.href = `sms:01057138417?body=${text}`;
-    });
-
-    // 카카오톡 전송 (복사 후 이동)
-    document.getElementById('sendKakao').addEventListener('click', () => {
-      const text = `[올리셋 상담요청]\n${answers.join(', ')}`;
-      navigator.clipboard.writeText(text).then(() => {
-        alert("상담요청 내용이 복사되었습니다. 카카오톡에서 바로 붙여넣기 해주세요 😊");
-        window.location.href = 'https://open.kakao.com/o/sSjtKV0h';
-      });
     });
   </script>
 </body>
