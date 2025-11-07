@@ -7,7 +7,7 @@
   <style>
     body {
       font-family: 'Pretendard','Noto Sans KR',sans-serif;
-      background: #f8fafb;
+      background: #f9fbfc;
       color: #2b3a42;
       margin: 0;
       padding: 0;
@@ -17,34 +17,38 @@
     /* 상단 고정 영역 */
     header {
       position: fixed;
-      top: 0; left: 0; width: 100%;
-      background: white;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: #fff;
       box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-      z-index: 999;
+      z-index: 1000;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 12px 0;
+      padding: 10px 0;
     }
 
     header img {
-      height: 32px;
+      height: 34px;
       margin-bottom: 4px;
     }
+
     header h1 {
-      font-size: 14px;
-      font-weight: 600;
+      font-size: 13px;
+      font-weight: 500;
       color: #007b8f;
       margin: 0;
     }
 
-    .chat-container {
+    /* 본문 영역 */
+    main {
       margin-top: 90px;
+      margin-bottom: 140px;
+      overflow-y: auto;
+      height: calc(100vh - 230px);
       padding: 20px;
-      max-width: 420px;
-      margin-left: auto;
-      margin-right: auto;
-      padding-bottom: 240px;
+      box-sizing: border-box;
     }
 
     .bubble {
@@ -79,9 +83,8 @@
       cursor: pointer;
       transition: background 0.3s;
     }
-    .choice.selected {
-      background: #00a3b0;
-    }
+
+    .choice.selected { background: #00a3b0; }
     .choice:hover { background: #005e6b; }
 
     .summary {
@@ -94,7 +97,7 @@
     /* 하단 상담 버튼 */
     .floating-bar {
       position: fixed;
-      bottom: 80px;
+      bottom: 50px;
       left: 0;
       width: 100%;
       background: white;
@@ -123,15 +126,17 @@
     /* 하단 회사정보 */
     footer {
       position: fixed;
-      bottom: 0; left: 0;
+      bottom: 0;
+      left: 0;
       width: 100%;
-      background: #f0f0f0;
+      background: #f2f2f2;
       color: #555;
-      font-size: 11px;
+      font-size: 10px;
       text-align: center;
-      line-height: 1.5;
-      padding: 6px 10px;
+      padding: 5px 6px;
       box-sizing: border-box;
+      white-space: nowrap;
+      overflow-x: auto;
     }
 
   </style>
@@ -140,14 +145,14 @@
 
   <!-- 상단 로고 & 슬로건 -->
   <header>
-    <img src="https://via.placeholder.com/120x32?text=All+Reset" alt="올리셋 로고">
+    <img src="logo.png" alt="올리셋 로고">
     <h1>당신이 떠난 자리, All Reset 해드립니다.</h1>
   </header>
 
   <!-- 대화 컨테이너 -->
-  <div class="chat-container" id="chat">
-    <div class="bubble">👋 안녕하세요, <strong>올리셋</strong>입니다.<br>정리할 공간을 알려주세요.</div>
-  </div>
+  <main id="chat">
+    <div class="bubble">👋 안녕하세요, <strong>올리셋</strong>입니다.<br>도움이 필요한 공간을 알려주세요.</div>
+  </main>
 
   <!-- 하단 상담 버튼 -->
   <div class="floating-bar">
@@ -155,12 +160,9 @@
     <a href="http://pf.kakao.com/_RklHn" target="_blank" class="float-btn kakao-btn">💬 카카오톡 문의</a>
   </div>
 
-  <!-- 회사정보 -->
+  <!-- 회사정보 (한 줄 정리) -->
   <footer>
-    상호: (주)디에이치씨솔루션 | 주소: 서울특별시 송파구 거여동 604-3 아피체 제8층 제806호<br>
-    대표: 김동현 | TEL: 02-1666-1757 | FAX: 0504-187-0081<br>
-    사업자등록번호: 140-87-00987 | 개인정보보호책임자: 박경혜<br>
-    E-mail: dhc-solution@naver.com
+    (주)디에이치씨솔루션 | 서울특별시 송파구 거여동 604-3 아피체 제8층 806호 | 대표 김동현 | TEL 02-1666-1757 | FAX 0504-187-0081 | 사업자 140-87-00987 | 개인정보보호책임자 박경혜 | E-mail dhc-solution@naver.com
   </footer>
 
   <script>
@@ -168,4 +170,85 @@
     const steps = [
       {
         q: "🏠 어떤 공간인가요?",
-        a: ["주거공간", "사무실", "공장", "식당", "원룸", "상가", "빌라"]()
+        a: ["주거공간", "사무실", "공장", "식당", "원룸", "상가", "빌라", "아파트", "창고", "점포"]
+      },
+      {
+        q: "💬 어떤 상황이신가요? (여러 개 선택 가능)",
+        a: ["이사 가요","폐업했어요","이민 가요","집주인이 복구 원해요","리모델링 전 정리","철거 준비","비워야 해요","이혼 후 정리","입주 전 청소","퇴거 예정"],
+        multi: true
+      },
+      {
+        q: "🧹 어떤 부분을 도와드릴까요? (복수선택 가능)",
+        a: ["전체 정리","청소","철거","폐기물 처리","원상복구","유품 정리","중고물품 매입","가전·가구 정리","잔여물 재판매","도배·페인트","벽·바닥 보수","전기·조명 철거","상가 내부 철거","공장 설비 해체","입주 전 청소"],
+        multi: true
+      },
+      {
+        q: "⏰ 언제까지 정리가 필요하신가요?",
+        a: ["오늘 바로","이번 주 내","다음 주쯤","날짜 미정"]
+      }
+    ];
+
+    let answers = [];
+    let stepIndex = 0;
+
+    function showStep(index) {
+      if (index >= steps.length) return showSummary();
+      const step = steps[index];
+      const bubble = document.createElement('div');
+      bubble.className = 'bubble';
+      bubble.innerHTML = step.q;
+
+      const choiceBox = document.createElement('div');
+      choiceBox.className = 'choices';
+
+      step.a.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'choice';
+        btn.innerText = opt;
+        btn.onclick = () => {
+          if (step.multi) {
+            btn.classList.toggle('selected');
+          } else {
+            answers.push(opt);
+            bubble.style.opacity = 0.6;
+            choiceBox.remove();
+            showStep(index + 1);
+          }
+        };
+        choiceBox.appendChild(btn);
+      });
+
+      if (step.multi) {
+        const nextBtn = document.createElement('button');
+        nextBtn.innerText = "다음으로 ▶";
+        nextBtn.className = 'choice';
+        nextBtn.style.background = "#444";
+        nextBtn.onclick = () => {
+          const selected = [...choiceBox.querySelectorAll('.selected')].map(b=>b.innerText);
+          answers.push(...selected);
+          choiceBox.remove();
+          showStep(index + 1);
+        };
+        choiceBox.appendChild(nextBtn);
+      }
+
+      bubble.appendChild(choiceBox);
+      chat.appendChild(bubble);
+      chat.scrollTo({ top: chat.scrollHeight, behavior: 'smooth' });
+    }
+
+    function showSummary() {
+      const bubble = document.createElement('div');
+      bubble.className = 'bubble summary';
+      bubble.innerHTML = `
+        ✅ 요약: ${answers.join(" / ")}<br><br>
+        지금 바로 상담하시겠어요?<br><strong>전화 또는 카카오톡으로 연결됩니다.</strong>`;
+      chat.appendChild(bubble);
+      chat.scrollTo({ top: chat.scrollHeight, behavior: 'smooth' });
+    }
+
+    setTimeout(() => showStep(0), 1000);
+  </script>
+
+</body>
+</html>
