@@ -8,38 +8,51 @@
   * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Noto Sans KR', sans-serif; }
   body { background-color: #111; color: #fff; overflow: hidden; }
   header, footer { position: fixed; left: 0; width: 100%; z-index: 10; }
-  header { top: 0; display: flex; align-items: center; justify-content: center; padding: 10px 0; background: rgba(0,0,0,0.85); border-bottom: 1px solid #333; }
-  header img { height: 28px; margin-right: 8px; }
-  header h1 { font-size: 15px; font-weight: 400; color: #00ffc6; }
 
-  footer { bottom: 0; background: rgba(0,0,0,0.9); font-size: 11px; color: #bbb; white-space: nowrap; overflow: hidden; display: flex; align-items: center; }
-  .scroll-text {
-    display: inline-block;
-    animation: scrollText 25s linear infinite;
-    padding-left: 100%;
-  }
+  /* HEADER */
+  header { top: 0; background: rgba(0,0,0,0.9); text-align: center; padding: 12px 0; border-bottom: 1px solid #222; }
+  header img { height: 40px; display: block; margin: 0 auto 5px auto; }
+  header h1 { font-size: 14px; color: #00ffc6; font-weight: 400; }
+
+  /* FOOTER */
+  footer { bottom: 0; background: rgba(0,0,0,0.9); font-size: 11px; color: #bbb; white-space: nowrap; overflow: hidden; }
+  .scroll-text { display: inline-block; animation: scrollText 25s linear infinite; }
   @keyframes scrollText {
     0% { transform: translateX(0); }
     100% { transform: translateX(-100%); }
   }
 
-  main { position: fixed; top: 60px; bottom: 45px; left: 0; right: 0; overflow-y: auto; text-align: center; padding: 20px; }
-
-  .question { opacity: 0; transform: translateY(30px); transition: all 0.4s ease; }
+  /* MAIN CONTENT */
+  main { position: fixed; top: 80px; bottom: 60px; left: 0; right: 0; overflow-y: auto; text-align: center; padding: 10px 15px; }
+  .question { opacity: 0; transform: translateY(20px); transition: all 0.3s ease; }
   .question.active { opacity: 1; transform: translateY(0); }
 
-  h2 { font-size: 17px; color: #fff; margin-bottom: 20px; }
-  .options { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
-  .option { background: #222; border: 1px solid #333; color: #ccc; padding: 10px 15px; border-radius: 25px; font-size: 14px; transition: all 0.2s; cursor: pointer; }
-  .option:hover { border-color: #00ffc6; color: #00ffc6; }
-  .option.active { background: #00ffc6; color: #000; box-shadow: 0 0 10px #00ffc6; }
-
-  .summary { text-align: left; background: #181818; padding: 20px; border-radius: 10px; margin-top: 20px; }
-  .consult-btn {
-    display: block; width: 100%; margin-top: 20px;
-    background: #00ffc6; color: #000; padding: 14px; border-radius: 30px;
-    font-size: 16px; font-weight: 600; text-decoration: none;
+  h2 { font-size: 16px; color: #fff; margin-bottom: 15px; }
+  .options { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+  .option {
+    background: #1b1b1b; border: 1px solid #333; color: #ccc;
+    padding: 9px 15px; border-radius: 22px; font-size: 13px;
+    transition: all 0.2s; cursor: pointer;
   }
+  .option:hover { border-color: #00ffc6; color: #00ffc6; }
+  .option.active { background: #00ffc6; color: #000; box-shadow: 0 0 8px #00ffc6; }
+
+  .summary { text-align: left; background: #181818; padding: 15px; border-radius: 10px; margin-top: 10px; font-size: 14px; }
+  .consult-btn {
+    display: block; width: 100%; margin-top: 15px;
+    background: #00ffc6; color: #000; padding: 12px; border-radius: 25px;
+    font-size: 15px; font-weight: 600; text-decoration: none;
+  }
+
+  /* FLOAT BUTTONS */
+  .float-buttons { position: fixed; right: 10px; bottom: 80px; display: flex; flex-direction: column; gap: 10px; z-index: 15; }
+  .float-buttons a {
+    width: 50px; height: 50px; border-radius: 50%; display: flex;
+    align-items: center; justify-content: center; color: #fff; font-size: 24px;
+    background: #00ffc6; text-decoration: none; box-shadow: 0 0 10px #00ffc6;
+  }
+  .float-buttons a.phone { background: #00bfa5; }
+  .float-buttons a.kakao { background: #fae100; color: #000; font-size: 22px; }
 
 </style>
 </head>
@@ -47,7 +60,7 @@
 
 <header>
   <img src="logo.png" alt="올리셋 로고">
-  <h1>당신이 떠난 자리, All Reset 해드립니다</h1>
+  <h1>당신이 떠난 자리, 몸만 떠나세요</h1>
 </header>
 
 <main>
@@ -104,9 +117,15 @@
   <div class="question" id="summary">
     <h2>선택하신 내용입니다.</h2>
     <div class="summary" id="summaryText"></div>
-    <a id="smsLink" href="#" class="consult-btn">상담요청</a>
+    <a id="smsLink" href="#" class="consult-btn">📩 상담요청 문자 보내기</a>
   </div>
 </main>
+
+<!-- FLOAT BUTTONS -->
+<div class="float-buttons">
+  <a href="tel:16661757" class="phone">📞</a>
+  <a href="https://pf.kakao.com/_RklHn" class="kakao">💬</a>
+</div>
 
 <footer>
   <div class="scroll-text">
@@ -128,7 +147,7 @@ questions.forEach((id, i) => {
         document.getElementById(`q${i+1}`).classList.remove('active');
         document.getElementById(`q${i+2}`)?.classList.add('active');
         if(i===3){ showSummary(); }
-      }, 300);
+      }, 250);
     });
   });
 });
@@ -140,7 +159,6 @@ function showSummary(){
   <p>정리 : ${answers.service}</p>
   <p>지역 : ${answers.region}</p>`;
   document.getElementById('summaryText').innerHTML = t;
-
   const smsBody = `공간:${answers.space}%0A상황:${answers.situation}%0A정리:${answers.service}%0A지역:${answers.region}`;
   document.getElementById('smsLink').href = `sms:01057138417?body=${smsBody}`;
 }
