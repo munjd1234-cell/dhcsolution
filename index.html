@@ -7,7 +7,556 @@
 <style>
   body {
     margin: 0;
+    font-family: 'Pretendard'a<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>올리셋 All Reset</title>
+<style>
+  body {
+    margin: 0;
     font-family: 'Pretendard', sans-serif;
+    background-color: #111;
+    color: #fff;
+    overflow: hidden;
+  }
+
+  /* --- [신규] 인트로 화면 스타일 --- */
+  #intro-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: #000;
+    color: #00bfa5;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 30px;
+    font-weight: 800;
+    line-height: 1.4;
+    z-index: 9999;
+    opacity: 1;
+    transition: opacity 1s ease-out;
+  }
+  #intro-screen.fade-out {
+    opacity: 0;
+  }
+  
+  /* 기본 콘텐츠는 처음에는 숨김 처리 (JS로 표시) */
+  #main-content-wrapper {
+    display: none; 
+    transition: opacity 0.5s;
+    width: 100%;
+    height: 100vh;
+  }
+  /* --- [신규] 끝 --- */
+
+  header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: #fff;
+    text-align: center;
+    padding: 10px 0;
+    z-index: 1000;
+    height: 79px; 
+    box-sizing: border-box;
+  }
+  header img { height: 40px; }
+  header h2 {
+    margin: 5px 0 0;
+    font-size: 14px;
+    color: #333;
+  }
+
+  /* --- [신규/수정] 메인 메뉴바 --- */
+  .main-menu {
+    position: fixed;
+    top: 79px; 
+    left: 0;
+    width: 100%;
+    background: #222;
+    display: flex;
+    justify-content: space-around;
+    border-bottom: 1px solid #444;
+    z-index: 1000;
+  }
+  .menu-btn {
+    padding: 12px 10px;
+    color: #ccc;
+    text-decoration: none;
+    font-size: 14px;
+    flex-grow: 1;
+    text-align: center;
+    border-left: 1px solid #444;
+    cursor: pointer;
+  }
+  .menu-btn:first-child {
+    border-left: none;
+  }
+  .menu-btn.active {
+    background-color: #00bfa5;
+    color: #fff;
+  }
+  /* --- [신규/수정] 끝 --- */
+
+  main {
+    margin-top: 125px; 
+    margin-bottom: 130px;
+    height: calc(100vh - 125px - 130px); 
+    overflow-y: auto;
+    text-align: center;
+    padding: 0 15px; 
+    box-sizing: border-box;
+  }
+
+  .content-section {
+    display: none; 
+    animation: fadeIn 0.3s ease-in-out;
+  }
+  .content-section.active {
+    display: block; 
+  }
+
+  #quiz-section.active .question.active { 
+    display: block; 
+  }
+  .question { 
+    display: none; 
+    animation: fadeIn 0.3s ease-in-out; 
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .options {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 15px;
+  }
+
+  .option-button {
+    background-color: #222;
+    border: 1px solid #444;
+    color: #ccc;
+    padding: 10px 18px;
+    border-radius: 30px;
+    font-size: 15px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+  }
+
+  .option-button.active {
+    background-color: #00bfa5;
+    color: #fff;
+    border: none;
+    box-shadow: 0 0 8px #00bfa5;
+  }
+
+  .fixed-buttons {
+    position: fixed;
+    bottom: 35px;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    z-index: 999;
+  }
+
+  .fixed-buttons button {
+    background: #00bfa5;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    padding: 12px 20px;
+    font-size: 15px;
+    cursor: pointer;
+  }
+
+  footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: #111;
+    color: #888;
+    font-size: 11px;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  .scroll-text {
+    display: inline-block;
+    animation: marquee 25s linear infinite;
+    padding-left: 0;
+  }
+
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-100%); }
+  }
+
+  #sendSMS {
+    background-color: #00bfa5;
+    color: #fff;
+    border: none;
+    border-radius: 30px;
+    padding: 15px 25px;
+    font-size: 16px;
+    cursor: pointer;
+    margin: 10px;
+  }
+
+  /* --- [수정] 갤러리 스타일 (블로그형 레이아웃) --- */
+  .gallery {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    padding-top: 20px;
+  }
+  .gallery img {
+    width: 45%; 
+    max-width: 200px;
+    height: auto;
+    object-fit: cover; /* 이미지 비율 유지 */
+    border-radius: 8px;
+    border: 1px solid #444;
+  }
+  
+  /* --- [기존] 회사소개 콘텐츠 스타일 --- */
+  #company-section {
+    text-align: left;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+    color: #ccc;
+  }
+  #company-section h2, 
+  #company-section h3,
+  #company-section h4 {
+    text-align: center;
+    color: #00bfa5;
+    margin-top: 30px;
+    margin-bottom: 10px;
+  }
+  #company-section h2 { font-size: 24px; }
+  #company-section h3 { font-size: 20px; }
+  #company-section h4 { font-size: 16px; color: #eee; }
+  #company-section p {
+    margin-bottom: 15px;
+  }
+  #company-section strong {
+    color: #00bfa5;
+  }
+  #company-section ol {
+    text-align: left; 
+    max-width: 300px; 
+    margin: 20px auto; 
+    padding-left: 20px;
+  }
+</style>
+</head>
+
+<body>
+  
+  <div id="intro-screen">
+    떠나는 공간<br>원스톱으로 리셋
+  </div>
+  
+  <div id="main-content-wrapper">
+    <header>
+      <img src="logo.png" alt="올리셋 로고" />
+      <h2>당신이 떠난 자리, 몸만 떠나세요</h2>
+    </header>
+
+    <nav class="main-menu">
+      <a href="#quiz" class="menu-btn" data-target="quiz-section">원스톱</a>
+      <a href="#company" class="menu-btn" data-target="company-section">올리셋</a>
+      <a href="#tech" class="menu-btn" data-target="tech-section">기술</a>
+      <a href="#portfolio" class="menu-btn" data-target="portfolio-section">실적</a>
+      <a href="#partner" class="menu-btn" data-target="partner-section">협력</a> </nav>
+
+    <main>
+      <div id="quiz-section" class="content-section">
+        <div class="question active" id="q1">
+          <h3>어떤 공간을 정리하시겠어요?</h3>
+          <div class="options" id="opt1"></div>
+        </div>
+
+        <div class="question" id="q2">
+          <h3>어떤 상황인가요?</h3>
+          <div class="options" id="opt2"></div>
+        </div>
+
+        <div class="question" id="q3">
+          <h3>어떤 작업이 필요하신가요?</h3>
+          <div class="options" id="opt3"></div>
+        </div>
+
+        <div class="question" id="q4">
+          <h3>규모를 선택해주세요</h3>
+          <div class="options" id="opt4"></div>
+        </div>
+
+        <div class="question" id="q5">
+          <h3>지역을 선택해주세요</h3>
+          <div class="options" id="opt5"></div>
+        </div>
+
+        <div class="question" id="result">
+          <h3>상담 내용 </h3>
+          <p id="summary"></p>
+          <button id="sendSMS">📩내용전달 (자동문자)</button>
+        </div>
+      </div>
+      <div id="company-section" class="content-section">
+        <h2>올리셋(AllRest)</h2>
+        <p><strong>공간의 완벽한 마무리, 새로운 시작의 동반자</strong></p>
+        <p><strong>올리셋(AllRest) - 모든 것을 정리하고, 편안히 새로운 시작으로</strong></p>
+        <p>언제나 고객의 편의를 최우선으로 생각합니다.<br>
+        새로운 시작을 위한 완벽한 마무리, 올리셋과 함께 하세요.<br>
+        24시간 상담 가능 | 연중무휴 | 전국 서비스</p>
+      </div>
+      <div id="tech-section" class="content-section">
+        <h3>기술 (s03 폴더)</h3>
+        <div class="gallery" id="tech-gallery-container">
+          </div>
+      </div>
+      <div id="portfolio-section" class="content-section">
+        <h3>실적 (jpg 폴더)</h3>
+        <div class="gallery" id="portfolio-gallery-container">
+          </div>
+      </div>
+      <div id="partner-section" class="content-section">
+        <h3>협력 (s04 폴더)</h3>
+        <div class="gallery" id="partner-gallery-container">
+          </div>
+      </div>
+      </main>
+
+    <div class="fixed-buttons">
+      <button onclick="window.location.href='tel:16661757'">📞 전화상담</button>
+      <button onclick="window.location.href='https://open.kakao.com/o/sSjtKV0h'">💬 카카오톡</button>
+    </div>
+
+    <footer>
+      <div class="scroll-text">
+        상호: (주)디에이치씨솔루션 | 주소: 서울특별시 송파구 거여동 604-3 0806호 | 대표: 김동현 | TEL: 02-1666-1757 | 
+        팩스: 0504-187-0081 | 사업자등록번호: 140-87-00987 | 개인정보책임자: 박경혜 | E-mail: dhc-solution@naver.com
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    // --- [신규] 인트로 및 메인 로직 ---
+    const introScreen = document.getElementById('intro-screen');
+    const mainWrapper = document.getElementById('main-content-wrapper');
+    const quizSection = document.getElementById('quiz-section');
+    const menuButtons = document.querySelectorAll('.menu-btn');
+    const contentSections = document.querySelectorAll('.content-section');
+    const mainContent = document.querySelector('main');
+    const onestopMenuBtn = document.querySelector('[data-target="quiz-section"]');
+
+    function showMainContent() {
+      // 인트로 숨기기
+      introScreen.classList.add('fade-out');
+      setTimeout(() => {
+        introScreen.style.display = 'none';
+        
+        // 메인 콘텐츠 표시 및 초기화면 설정 (원스톱)
+        mainWrapper.style.display = 'block';
+        
+        // 초기 탭 활성화: '원스톱' (quiz-section)
+        menuButtons.forEach(b => b.classList.remove('active'));
+        onestopMenuBtn.classList.add('active');
+        
+        contentSections.forEach(section => {
+          section.style.display = 'none';
+          section.classList.remove('active');
+        });
+
+        quizSection.style.display = 'block';
+        quizSection.classList.add('active');
+        resetQuiz(); // 퀴즈 초기 상태로 설정
+      }, 1000); // fade-out 애니메이션 시간 (1초) 후 display:none
+    }
+
+    // 페이지 로드 시 인트로 시작 후 메인 콘텐츠로 전환 (3초 후)
+    document.addEventListener('DOMContentLoaded', () => {
+      // 3초 후 메인 콘텐츠 표시
+      setTimeout(showMainContent, 3000); 
+    });
+
+
+    // --- [수정/신규] 갤러리 로직 ---
+
+    /**
+     * 지정된 폴더와 파일 패턴으로 갤러리 이미지를 동적으로 생성합니다.
+     * @param {string} containerId - 이미지를 추가할 갤러리 컨테이너의 ID
+     * @param {string} folder - 이미지 폴더 경로 (예: 's03')
+     * @param {string} baseName - 파일 이름 기본 (예: 'certificate_img') 또는 파일 시작 번호 (예: '001')
+     * @param {number} startIdx - 시작 인덱스 (1 또는 0)
+     * @param {number} endIdx - 종료 인덱스
+     * @param {number} padding - 파일 번호의 자릿수 (예: '001'이면 3)
+     */
+    function generateGallery(containerId, folder, baseName, startIdx, endIdx, padding = 0) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+
+        let html = '';
+        for (let i = startIdx; i <= endIdx; i++) {
+            let fileName;
+            let fileNumber = i.toString().padStart(padding, '0');
+            
+            if (padding > 0) {
+                // 숫자형 파일명 (예: 001.jpg)
+                fileName = `${fileNumber}.jpg`;
+            } else {
+                // 기본 파일명 (예: certificate_img1.jpg)
+                fileName = `${baseName}${i}.jpg`;
+            }
+
+            const src = `${folder}/${fileName}`;
+            html += `<img src="${src}" alt="${baseName} ${i}">`;
+        }
+        container.innerHTML = html;
+    }
+
+    // 갤러리 로드
+    document.addEventListener('DOMContentLoaded', () => {
+        // 1. 기술 (s03/certificate_img1.jpg ~ 6.jpg) - padding 없음, baseName 사용
+        generateGallery('tech-gallery-container', 's03', 'certificate_img', 1, 6, 0); 
+        
+        // 2. 실적 (jpg/001.jpg ~ 021.jpg, 최대 999번) - padding 3
+        generateGallery('portfolio-gallery-container', 'jpg', '001', 1, 21, 3);
+        // * 향후 이미지를 999번까지 추가해도 갤러리 생성 로직에서 endIdx만 999로 변경하면 됩니다.
+
+        // 3. 협력 (s04/001.jpg ~ 010.jpg) - padding 3 (예시로 10개만 로드)
+        generateGallery('partner-gallery-container', 's04', '001', 1, 10, 3);
+    });
+
+    // --- [기존] 탭 네비게이션 로직 (수정) ---
+
+    menuButtons.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault(); 
+        const targetId = btn.getAttribute('data-target');
+        const targetSection = document.getElementById(targetId);
+
+        // 모든 섹션 숨기기
+        contentSections.forEach(section => {
+          section.style.display = 'none';
+          section.classList.remove('active');
+        });
+
+        // 타겟 섹션 보이기
+        if (targetSection) {
+          targetSection.style.display = 'block';
+          targetSection.classList.add('active');
+        }
+        
+        // "원스톱" 탭 클릭 시 퀴즈 리셋
+        if (targetId === 'quiz-section') {
+          resetQuiz();
+        }
+
+        // 메뉴 버튼 활성 상태 업데이트
+        menuButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        
+        // 새 섹션 클릭 시 메인 콘텐츠 스크롤을 맨 위로
+        mainContent.scrollTop = 0;
+      });
+    });
+
+    // --- [기존] 퀴즈 로직 (일부 수정) ---
+    const questions = document.querySelectorAll('#quiz-section .question');
+    let current = 0;
+    let answers = [];
+
+    function resetQuiz() {
+      // 모든 질문 숨기기
+      questions.forEach(q => q.classList.remove('active'));
+      // 첫번째 질문 보이기
+      current = 0;
+      if (questions.length > 0) {
+        questions[0].classList.add('active');
+      }
+      // 답변 초기화
+      answers = [];
+      // 요약 내용 지우기
+      document.getElementById('summary').textContent = '';
+      // 모든 옵션 버튼 비활성화
+      document.querySelectorAll('#quiz-section .option-button').forEach(b => b.classList.remove('active'));
+    }
+
+    // 버튼 자동 생성용 데이터
+    const data = {
+      opt1: ['공장','사무실','식당','빌딩','병원','상가','주택','아파트','원룸','학교','관공서','공연장','야외시설','선박','차량','항공기','공항','기타'],
+      opt2: ['이사','정리','이민','폐업','이전','철거','공사','화재','사건','사고','침수','기타'],
+      opt3: ['전체 알아서 해주세요','일괄정리','원상복구','중고판매정리','냄새제거','곰팡이제거','시설관리','폐기물처리','정리정돈','청소','기타'],
+      opt4: ['10평 미만','20평 미만','30평 미만','50평 미만','100평 미만','500평 미만','1000평 미만','1000평 이상','소규모','대규모','정기적인','기타'],
+      opt5: ['서울','경기','인천','강원','충북','충남','전북','전남','경북','경남','부산','대구','광주','대전','울산','세종','제주','해외','기타']
+    };
+
+    // 반복되는 버튼 생성 코드
+    Object.keys(data).forEach(id => {
+      const container = document.getElementById(id);
+      data[id].forEach(text => {
+        const btn = document.createElement('button');
+        btn.className = 'option-button';
+        btn.textContent = text;
+        container.appendChild(btn);
+      });
+    });
+
+    // 클릭 이벤트
+    document.querySelectorAll('#quiz-section .option-button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const parent = btn.closest('.question');
+        parent.querySelectorAll('.option-button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        setTimeout(() => showNext(), 200);
+      });
+    });
+
+    function showNext() {
+      questions[current].classList.remove('active');
+      current++;
+      if (current < questions.length) {
+        questions[current].classList.add('active');
+      }
+      if (current === questions.length - 1) summarize();
+    }
+
+    function summarize() {
+      answers = [];
+      document.querySelectorAll('#quiz-section .option-button.active').forEach(btn => {
+        answers.push(btn.textContent);
+      });
+      document.getElementById('summary').textContent = `선택하신 내용: ${answers.join(', ')}`;
+    }
+
+    // 문자 전송
+    document.getElementById('sendSMS').addEventListener('click', () => {
+      const text = encodeURIComponent(`[올리셋 상담요청]\n${answers.join(', ')}`);
+      window.location.href = `sms:01057138417?body=${text}`;
+    });
+  </script>
+</body>
+</html>, sans-serif;
     background-color: #111;
     color: #fff;
     overflow: hidden;
