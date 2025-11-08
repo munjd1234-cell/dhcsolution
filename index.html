@@ -1,311 +1,539 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MOS-Solution</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: "Noto Sans KR", sans-serif;
-      background: #000;
-      color: #fff;
-      overflow-x: hidden;
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>올리셋 All Reset</title>
+<style>
+  body {
+    margin: 0;
+    font-family: 'Pretendard', sans-serif;
+    background-color: #111;
+    color: #fff;
+    overflow: hidden;
+  }
 
-    header {
-      background: #111;
-      padding: 10px 0;
-      text-align: center;
-    }
+  header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: #fff;
+    text-align: center;
+    padding: 10px 0;
+    z-index: 1000;
+    /* 헤더 높이를 명시적으로 계산 (padding + img + h2 margin + h2 font) */
+    height: 79px; 
+    box-sizing: border-box;
+  }
+  header img { height: 40px; }
+  header h2 {
+    margin: 5px 0 0;
+    font-size: 14px;
+    color: #333;
+  }
 
-    header img {
-      width: 180px;
-      background: #fff;
-      border-radius: 8px;
-      padding: 4px;
-    }
+  /* --- [신규] 메인 메뉴바 --- */
+  .main-menu {
+    position: fixed;
+    top: 79px; /* 헤더 높이 바로 아래 */
+    left: 0;
+    width: 100%;
+    background: #222;
+    display: flex;
+    justify-content: space-around;
+    border-bottom: 1px solid #444;
+    z-index: 1000;
+  }
+  .menu-btn {
+    padding: 12px 10px;
+    color: #ccc;
+    text-decoration: none;
+    font-size: 14px;
+    flex-grow: 1;
+    text-align: center;
+    border-left: 1px solid #444;
+    cursor: pointer;
+  }
+  .menu-btn:first-child {
+    border-left: none;
+  }
+  .menu-btn.active {
+    background-color: #00bfa5;
+    color: #fff;
+  }
+  /* --- [신규] 끝 --- */
 
-    nav {
-      display: flex;
-      justify-content: center;
-      background: #000;
-      border-top: 1px solid #222;
-      border-bottom: 1px solid #222;
-    }
+  main {
+    /* 기존 margin-top(100) + 새 메뉴바 높이(약 45) = 125px */
+    margin-top: 125px; 
+    margin-bottom: 130px;
+    height: calc(100vh - 125px - 130px); /* 높이 재계산 */
+    overflow-y: auto;
+    text-align: center;
+    padding: 0 15px; /* 콘텐츠용 좌우 여백 */
+    box-sizing: border-box;
+  }
 
-    nav button {
-      background: transparent;
-      border: none;
-      color: #0ff;
-      font-size: 14px;
-      padding: 10px 15px;
-      cursor: pointer;
-    }
+  /* --- [신규] 콘텐츠 섹션 --- */
+  .content-section {
+    display: none; /* 기본적으로 모든 섹션 숨김 */
+    animation: fadeIn 0.3s ease-in-out;
+  }
+  .content-section.active {
+    display: block; /* 활성화된 섹션만 보임 */
+  }
+  /* --- [신규] 끝 --- */
 
-    nav button:hover {
-      color: #fff;
-    }
+  /* 기존 .question.active 대신 #quiz-section.active 내부의 .question.active를 대상 */
+  #quiz-section.active .question.active { 
+    display: block; 
+  }
+  .question { 
+    display: none; 
+    animation: fadeIn 0.3s ease-in-out; 
+  }
 
-    .question {
-      display: none;
-      text-align: center;
-      padding: 40px 10px;
-    }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
 
-    .active {
-      display: block;
-    }
+  .options {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 15px;
+  }
 
-    h3 {
-      color: #0ff;
-      margin-bottom: 20px;
-    }
+  .option-button {
+    background-color: #222;
+    border: 1px solid #444;
+    color: #ccc;
+    padding: 10px 18px;
+    border-radius: 30px;
+    font-size: 15px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+  }
 
-    .option-button {
-      background: #111;
-      color: #fff;
-      border: 1px solid #333;
-      border-radius: 10px;
-      padding: 12px 20px;
-      margin: 5px;
-      cursor: pointer;
-      transition: 0.3s;
-    }
+  .option-button.active {
+    background-color: #00bfa5;
+    color: #fff;
+    border: none;
+    box-shadow: 0 0 8px #00bfa5;
+  }
 
-    .option-button:hover {
-      background: #0ff;
-      color: #000;
-    }
+  .fixed-buttons {
+    position: fixed;
+    bottom: 35px;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    z-index: 999;
+  }
 
-    .bottom-fixed {
-      position: fixed;
-      bottom: 0;
-      width: 100%;
-      background: #000;
-      text-align: center;
-      padding: 10px 0;
-    }
+  .fixed-buttons button {
+    background: #00bfa5;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    padding: 12px 20px;
+    font-size: 15px;
+    cursor: pointer;
+  }
 
-    .bottom-fixed button {
-      background: #0ff;
-      border: none;
-      color: #000;
-      font-weight: bold;
-      padding: 10px 20px;
-      border-radius: 10px;
-      margin: 0 5px;
-      cursor: pointer;
-    }
+  footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: #111;
+    color: #888;
+    font-size: 11px;
+    white-space: nowrap;
+    overflow: hidden;
+  }
 
-    .scroll-text {
-      overflow: hidden;
-      white-space: nowrap;
-      box-sizing: border-box;
-    }
+  .scroll-text {
+    display: inline-block;
+    animation: marquee 25s linear infinite;
+    padding-left: 0;
+  }
 
-    .scroll-text span {
-      display: inline-block;
-      padding-left: 100%;
-      animation: scroll 30s linear infinite;
-    }
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-100%); }
+  }
 
-    @keyframes scroll {
-      from {
-        transform: translateX(0%);
-      }
-      to {
-        transform: translateX(-100%);
-      }
-    }
+  #sendSMS {
+    background-color: #00bfa5;
+    color: #fff;
+    border: none;
+    border-radius: 30px;
+    padding: 15px 25px;
+    font-size: 16px;
+    cursor: pointer;
+    margin: 10px;
+  }
 
-    .company-text {
-      text-align: left;
-      padding: 20px;
-      line-height: 1.6;
-      font-size: 14px;
-    }
-
-    .gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-      gap: 10px;
-      padding: 10px;
-    }
-
-    .gallery-grid img {
-      width: 100%;
-      border-radius: 10px;
-      object-fit: cover;
-    }
-
-    .send-btn {
-      background: linear-gradient(90deg, #0ff, #00aaff);
-      border: none;
-      color: #000;
-      font-weight: bold;
-      padding: 12px 30px;
-      border-radius: 20px;
-      font-size: 16px;
-      cursor: pointer;
-      margin-top: 20px;
-    }
-
-    .send-btn:hover {
-      background: linear-gradient(90deg, #00aaff, #0ff);
-    }
-
-  </style>
+  /* --- [신규] 갤러리 스타일 --- */
+  .gallery {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    padding-top: 20px;
+  }
+  .gallery img {
+    width: 45%; /* 모바일에서 2열 */
+    max-width: 200px;
+    height: auto;
+    border-radius: 8px;
+    border: 1px solid #444;
+  }
+  
+  /* --- [신규] 회사소개 콘텐츠 스타일 --- */
+  #company-section {
+    text-align: left;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+    color: #ccc;
+  }
+  #company-section h2, 
+  #company-section h3,
+  #company-section h4 {
+    text-align: center;
+    color: #00bfa5;
+    margin-top: 30px;
+    margin-bottom: 10px;
+  }
+  #company-section h2 { font-size: 24px; }
+  #company-section h3 { font-size: 20px; }
+  #company-section h4 { font-size: 16px; color: #eee; }
+  #company-section p {
+    margin-bottom: 15px;
+  }
+  #company-section strong {
+    color: #00bfa5;
+  }
+  #company-section ol {
+    text-align: left; 
+    max-width: 300px; 
+    margin: 20px auto; 
+    padding-left: 20px;
+  }
+</style>
 </head>
+
 <body>
+  <header>
+    <img src="logo.png" alt="올리셋 로고" />
+    <h2>당신이 떠난 자리, 몸만 떠나세요</h2>
+  </header>
 
-<header>
-  <img src="logo.png" alt="MOS-Solution 로고" />
-  <p style="color:#fff; margin:5px 0;">당신이 떠난자리, 몸만 떠나세요</p>
-</header>
+  <nav class="main-menu">
+    <a href="#quiz" class="menu-btn active" data-target="quiz-section">견적신청</a>
+    <a href="#company" class="menu-btn" data-target="company-section">올리셋</a>
+    <a href="#tech" class="menu-btn" data-target="tech-section">기술</a>
+    <a href="#portfolio" class="menu-btn" data-target="portfolio-section">실적</a>
+  </nav>
 
-<nav>
-  <button onclick="showSection('q1')">상담하기</button>
-  <button onclick="showSection('company')">회사소개</button>
-  <button onclick="showSection('certificate')">CERTIFICATE</button>
-  <button onclick="showSection('gallery')">작업사진</button>
-</nav>
+  <main>
+    <div id="quiz-section" class="content-section active">
+      <div class="question active" id="q1">
+        <h3>어떤 공간을 정리하시겠어요?</h3>
+        <div class="options" id="opt1"></div>
+      </div>
 
-<!-- 질문 1~5 기존 구조 -->
-<div class="question active" id="q1">
-  <h3>1️⃣ 어떤 서비스를 원하시나요?</h3>
-  <button class="option-button" onclick="nextQuestion('q2')">곰팡이 제거</button>
-  <button class="option-button" onclick="nextQuestion('q2')">공조덕트 세척</button>
-  <button class="option-button" onclick="nextQuestion('q2')">기타 문의</button>
-</div>
+      <div class="question" id="q2">
+        <h3>어떤 상황인가요?</h3>
+        <div class="options" id="opt2"></div>
+      </div>
 
-<div class="question" id="q2">
-  <h3>2️⃣ 희망 일자는?</h3>
-  <button class="option-button" onclick="nextQuestion('q3')">가능한 빨리</button>
-  <button class="option-button" onclick="nextQuestion('q3')">1주일 이내</button>
-  <button class="option-button" onclick="nextQuestion('q3')">상담 후 결정</button>
-</div>
+      <div class="question" id="q3">
+        <h3>어떤 작업이 필요하신가요?</h3>
+        <div class="options" id="opt3"></div>
+      </div>
 
-<div class="question" id="q3">
-  <h3>3️⃣ 장소 유형을 선택해주세요</h3>
-  <button class="option-button" onclick="nextQuestion('q4')">주거시설</button>
-  <button class="option-button" onclick="nextQuestion('q4')">상업시설</button>
-  <button class="option-button" onclick="nextQuestion('q4')">산업시설</button>
-</div>
+      <div class="question" id="q4">
+        <h3>규모를 선택해주세요</h3>
+        <div class="options" id="opt4"></div>
+      </div>
 
-<div class="question" id="q4">
-  <h3>4️⃣ 규모를 선택해주세요</h3>
-  <button class="option-button" onclick="nextQuestion('q5')">10평 미만</button>
-  <button class="option-button" onclick="nextQuestion('q5')">20평 미만</button>
-  <button class="option-button" onclick="nextQuestion('q5')">50평 미만</button>
-  <button class="option-button" onclick="nextQuestion('q5')">100평 이상</button>
-  <button class="option-button" onclick="nextQuestion('q5')">정기적인</button>
-  <button class="option-button" onclick="nextQuestion('q5')">잘 모름</button>
-</div>
+      <div class="question" id="q5">
+        <h3>지역을 선택해주세요</h3>
+        <div class="options" id="opt5"></div>
+      </div>
 
-<div class="question" id="q5">
-  <h3>5️⃣ 지역을 선택해주세요</h3>
-  <div id="region-buttons"></div>
-</div>
+      <div class="question" id="result">
+        <h3>상담 내용 </h3>
+        <p id="summary"></p>
+        <button id="sendSMS">📩내용전달 (자동문자)</button>
+      </div>
+    </div>
+    <div id="company-section" class="content-section">
+      <h2>올리셋(AllRest)</h2>
+      <p><strong>공간의 완벽한 마무리, 새로운 시작의 동반자</strong></p>
+      <p>공간을 떠나는 모든 순간을 위한 토탈 솔루션 파트너입니다.</p>
+      <p>이사를 가거나 폐업을 하거나 사업장을 옮길 때, 사람들은 새로운 시작에 집중하고 싶어합니다. 하지만 현실은 어떤가요?</p>
+      <p>여러 업체를 찾아 견적을 받고, 각각의 일정을 조율하고, 반복되는 현장 방문으로 시간과 에너지를 소진합니다.</p>
+      <p>올리셋은 바로 이 지점에서 출발했습니다.<br>"왜 한 곳에서 모든 것을 해결할 수 없을까?"</p>
+      <p>올리셋은 <strong>공간 퇴거 토탈 케어 전문 기업</strong>입니다.<br>
+      당신이 공간을 떠날 때 필요한 모든 과정을 하나의 창구에서, 하나의 팀이, 하나의 일정으로 완벽하게 마무리합니다.</p>
 
-<div class="question" id="summary">
-  <h3>고객님의 요청 내용</h3>
-  <p id="summaryText"></p>
-  <button class="send-btn" onclick="sendSms()">📩 문자로 상담 요청 보내기</button>
-</div>
+      <h3>올리셋의 통합 서비스</h3>
+      <p>올리셋은 공간 퇴거 시 필요한 모든 과정을 하나로 통합하여 제공합니다.</p>
+      
+      <h4>공간 비우기 - 남겨진 모든 것의 처리</h4>
+      <p>사용하던 공간에는 수많은 물건들이 있습니다. 올리셋은 이 모든 것을 한 번에 정리합니다.<br>
+      가져갈 것과 버릴 것을 분류하고, 가치 있는 물건은 매입하고, 처리가 필요한 것은 적절히 수거합니다.<br>
+      대형 가구부터 작은 잡동사니까지, 당신이 신경 쓸 필요가 없습니다.</p>
 
-<!-- 회사소개 -->
-<div class="question" id="company">
-  <h3>회사소개</h3>
-  <div class="company-text">
-    <p>당사는 일본의 특화된 장비와 케미칼을 이용하여 시설물의 위생, 미관, 공조시스템분야에서 이제껏 경험할 수 없었던...</p>
-    <!-- 전체 텍스트 추가 -->
+      <h4>공간 정리 - 완벽한 청소와 정돈</h4>
+      <p>비워진 공간을 깨끗하게 만듭니다.<br>
+      오랜 사용으로 누적된 때와 얼룩, 냄새까지 제거합니다. 주거공간, 사무실, 매장, 공장 등 공간의 특성에 맞는 전문적인 관리를 진행합니다.</p>
+
+      <h4>공간 복구 - 원래 상태로의 회복</h4>
+      <p>임대차 계약 시 받았던 그 상태로 돌려놓습니다.<br>
+      훼손된 벽지, 바닥, 시설물을 수리하고, 설치했던 것들을 철거합니다. 보증금을 온전히 돌려받기 위한, 혹은 다음 임차인을 맞이하기 위한 완벽한 복구 작업을 진행합니다.</p>
+
+      <h4>공간 전환 - 가치의 재발견</h4>
+      <p>버려지는 것들 속에서 가치를 찾아냅니다.<br>
+      중고로 판매 가능한 물건들을 현장에서 바로 감정하고 매입하여, 당신의 비용 부담을 줄여드립니다.<br>
+      사무용 집기, 가전제품, 공장 설비 등 전문적인 안목으로 공정한 가격을 제시합니다.</p>
+
+      <h3>왜 올리셋인가</h3>
+      
+      <h4>하나의 전화, 하나의 팀, 하나의 일정</h4>
+      <p>올리셋의 가장 큰 가치는 여기에 있습니다. 한 번의 연락으로 모든 것이 해결됩니다.<br>
+      여러 업체를 알아보고, 각각 견적을 받고, 따로따로 일정을 잡을 필요가 없습니다.<br>
+      우리 팀이 현장을 방문해 모든 것을 파악하고, 통합된 견적을 제시하며, 하나의 일정으로 모든 작업을 완료합니다.</p>
+
+      <h4>시간과 에너지의 절약</h4>
+      <p>이사나 폐업은 그 자체로 많은 에너지가 필요한 일입니다.<br>
+      새로운 공간 준비, 짐 정리, 각종 행정 절차 등 신경 써야 할 것이 산더미입니다.<br>
+      올리셋은 기존 공간의 뒷처리라는 무거운 짐을 덜어드립니다. 당신은 새로운 시작에만 집중하세요.</p>
+
+      <h4>비용의 투명성과 효율성</h4>
+      <p>통합 서비스로 불필요한 중복 비용을 없앱니다.<br>
+      중고물품 매입 금액을 전체 비용에서 차감하여, 실제 부담 금액을 최소화합니다. 숨겨진 추가 비용 없이, 처음 제시한 견적 그대로 작업을 완료합니다.</p>
+
+      <h4>전문성과 책임감</h4>
+      <p>올리셋의 팀원들은 각 분야의 전문가들입니다. 청소, 폐기물 처리, 인테리어 복구, 중고 감정 등 각자의 영역에서 오랜 경험을 쌓은 프로페셔널들이 하나의 팀으로 움직입니다.<br>
+      모든 과정에 대해 올리셋이 책임집니다.</p>
+
+      <h4>신속한 대응</h4>
+      <p>긴급하게 공간을 비워야 하는 상황에도 신속하게 대응합니다.<br>
+      24시간 내 현장 방문과 작업 착수가 가능하며, 체계적인 인력 운영으로 소규모 공간은 당일 완료, 대규모 공간도 최단 기간 내 마무리합니다.</p>
+
+      <h3>올리셋을 필요로 하는 순간들</h3>
+      <p><strong>이사를 준비하는 세입자</strong><br>
+      전세나 월세 계약이 끝나고 이사를 갈 때, 보증금을 온전히 돌려받으려면 깨끗한 상태로 집을 비워야 합니다.<br>
+      새집 준비에 바쁜 당신을 위해 올리셋이 구집의 모든 것을 해결합니다.</p>
+      
+      <p><strong>폐업을 결정한 사업자</strong><br>
+      음식점, 카페, 소매점을 운영하다 폐업을 결정했을 때, 남은 집기와 재고, 인테리어 철거, 공간 정리 등 해야 할 일이 많습니다.<br>
+      올리셋이 한 번에 처리합니다.</p>
+
+      <p><strong>사업장을 이전하는 기업</strong><br>
+      사무실이나 공장을 이전할 때, 기존 공간을 정리하는 것은 큰 부담입니다.<br>
+      올리셋이 신속하게 공간을 정리하여 임대차 계약을 깔끔하게 마무리할 수 있도록 돕습니다.</p>
+
+      <p><strong>새로운 임차인을 준비하는 건물주</strong><br>
+      임차인이 나간 후 다음 임차인을 위해 공간을 정비해야 할 때, 여러 업체를 부를 필요 없이 올리셋 한 곳에서 모든 것을 처리합니다.</p>
+
+      <p><strong>급하게 공간을 정리해야 하는 누구나</strong><br>
+      상속받은 부동산, 경매로 낙찰받은 물건, 예상치 못한 상황으로 급하게 공간을 비워야 할 때, 올리셋이 신속하게 도와드립니다.</p>
+
+      <h3>올리셋의 작업 방식</h3>
+      <ol>
+        <li><strong>상담:</strong> 전화나 온라인으로 상황을 간단히 알려주세요.</li>
+        <li><strong>현장 방문:</strong> 무료로 현장을 방문해 정확한 상태를 파악합니다.</li>
+        <li><strong>통합 견적:</strong> 모든 서비스를 포함한 하나의 명확한 견적을 제시합니다.</li>
+        <li><strong>일정 확정:</strong> 고객의 일정에 맞춰 작업 날짜를 정합니다.</li>
+        <li><strong>작업 진행:</strong> 전문 팀이 투입되어 모든 과정을 처리합니다.</li>
+        <li><strong>최종 확인:</strong> 고객과 함께 깨끗해진 공간을 확인하고 인계합니다.</li>
+      </ol>
+
+      <h3>새로운 시작을 위한 완벽한 마무리</h3>
+      <p>공간을 떠나는 순간은 새로운 시작의 시점입니다. 하지만 과거를 정리하지 못하면 미래로 나아가기 어렵습니다.<br>
+      올리셋은 당신이 뒤를 돌아보지 않고 앞으로 나아갈 수 있도록, 모든 마무리를 완벽하게 처리합니다.<br>
+      복잡한 과정들, 번거로운 일정 조율, 여러 업체와의 소통 스트레스 없이, 올리셋과 함께라면 공간의 마지막을 깔끔하게 정리할 수 있습니다.<br>
+      당신의 새로운 시작, 올리셋이 함께합니다.</p>
+
+      <p><strong>올리셋(AllRest) - 모든 것을 정리하고, 편안히 새로운 시작으로</strong></p>
+      <p>언제나 고객의 편의를 최우선으로 생각합니다.<br>
+      새로운 시작을 위한 완벽한 마무리, 올리셋과 함께 하세요.<br>
+      24시간 상담 가능 | 연중무휴 | 전국 서비스</p>
+    </div>
+    <div id="tech-section" class="content-section">
+      <h3>기술</h3>
+      <div class="gallery">
+        <img src="s03/certificate_img1.jpg" alt="기술 1">
+        <img src="s03/certificate_img2.jpg" alt="기술 2">
+        <img src="s03/certificate_img3.jpg" alt="기술 3">
+        <img src="s03/certificate_img4.jpg" alt="기술 4">
+        <img src="s03/certificate_img5.jpg" alt="기술 5">
+        <img src="s03/certificate_img6.jpg" alt="기술 6">
+      </div>
+    </div>
+    <div id="portfolio-section" class="content-section">
+      <h3>실적</h3>
+      <div class="gallery">
+        <img src="jpg/001.jpg" alt="실적 1">
+        <img src="jpg/002.jpg" alt="실적 2">
+        <img src="jpg/003.jpg" alt="실적 3">
+        <img src="jpg/004.jpg" alt="실적 4">
+        <img src="jpg/005.jpg" alt="실적 5">
+        <img src="jpg/006.jpg" alt="실적 6">
+        <img src="jpg/007.jpg" alt="실적 7">
+        <img src="jpg/008.jpg" alt="실적 8">
+        <img src="jpg/009.jpg" alt="실적 9">
+        <img src="jpg/010.jpg" alt="실적 10">
+        <img src="jpg/011.jpg" alt="실적 11">
+        <img src="jpg/012.jpg" alt="실적 12">
+        <img src="jpg/013.jpg" alt="실적 13">
+        <img src="jpg/014.jpg" alt="실적 14">
+        <img src="jpg/015.jpg" alt="실적 15">
+        <img src="jpg/016.jpg" alt="실적 16">
+        <img src="jpg/017.jpg" alt="실적 17">
+        <img src="jpg/018.jpg" alt="실적 18">
+        <img src="jpg/019.jpg" alt="실적 19">
+        <img src="jpg/020.jpg" alt="실적 20">
+        <img src="jpg/021.jpg" alt="실적 21">
+        </div>
+    </div>
+    </main>
+
+  <div class="fixed-buttons">
+    <button onclick="window.location.href='tel:16661757'">📞 전화상담</button>
+    <button onclick="window.location.href='https://open.kakao.com/o/sSjtKV0h'">💬 카카오톡</button>
   </div>
-  <button class="send-btn" onclick="showSection('q1')">🏠 홈으로 돌아가기</button>
-</div>
 
-<!-- CERTIFICATE -->
-<div class="question" id="certificate">
-  <h3>특허 및 기술인증</h3>
-  <div class="gallery-grid" id="certificateGallery"></div>
-  <button class="send-btn" onclick="showSection('q1')">🏠 홈으로 돌아가기</button>
-</div>
+  <footer>
+    <div class="scroll-text">
+      상호: (주)디에이치씨솔루션 | 주소: 서울특별시 송파구 거여동 604-3 0806호 | 대표: 김동현 | TEL: 02-1666-1757 | 
+      팩스: 0504-187-0081 | 사업자등록번호: 140-87-00987 | 개인정보책임자: 박경혜 | E-mail: dhc-solution@naver.com
+    </div>
+  </footer>
 
-<!-- 작업사진 -->
-<div class="question" id="gallery">
-  <h3>📸 작업사진</h3>
-  <div class="gallery-grid" id="photoGallery"></div>
-  <button class="send-btn" onclick="showSection('q1')">🏠 홈으로 돌아가기</button>
-</div>
+  <script>
+    // --- [신규] 탭 네비게이션 로직 ---
+    const menuButtons = document.querySelectorAll('.menu-btn');
+    const contentSections = document.querySelectorAll('.content-section');
+    const mainContent = document.querySelector('main');
 
-<div class="bottom-fixed">
-  <button onclick="location.href='tel:010-1234-5678'">📞 전화하기</button>
-  <button onclick="window.open('https://open.kakao.com/o/sSjtKV0h')">💬 카카오톡</button>
-  <div class="scroll-text"><span>© MOS-Solution — 일본 MOS기술 기반의 시설 위생관리 전문기업 —</span></div>
-</div>
+    menuButtons.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault(); // 링크 기본 동작 방지
+        const targetId = btn.getAttribute('data-target');
+        const targetSection = document.getElementById(targetId);
 
-<script>
-  const answers = {};
+        // 모든 섹션 숨기기
+        contentSections.forEach(section => {
+          section.style.display = 'none';
+          section.classList.remove('active');
+        });
 
-  function nextQuestion(nextId) {
-    const active = document.querySelector('.question.active');
-    const chosen = event.target.innerText;
-    const currentId = active.id;
-    answers[currentId] = chosen;
-    active.classList.remove('active');
-    document.getElementById(nextId).classList.add('active');
-  }
+        // 타겟 섹션 보이기
+        if (targetSection) {
+          targetSection.style.display = 'block';
+          targetSection.classList.add('active');
+        }
+        
+        // "견적신청" 탭 클릭 시 퀴즈 리셋
+        if (targetId === 'quiz-section') {
+          resetQuiz();
+        }
 
-  function showSection(id) {
-    document.querySelectorAll('.question').forEach(q => q.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-  }
+        // 메뉴 버튼 활성 상태 업데이트
+        menuButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        
+        // 새 섹션 클릭 시 메인 콘텐츠 스크롤을 맨 위로
+        mainContent.scrollTop = 0;
+      });
+    });
 
-  // 지역 버튼 자동 생성
-  const regions = ["서울","경기","인천","충남","충북","강원","전남","전북","부산","대구","광주","제주"];
-  const regionContainer = document.getElementById("region-buttons");
-  regions.forEach(r => {
-    const btn = document.createElement("button");
-    btn.className = "option-button";
-    btn.innerText = r;
-    btn.onclick = () => { nextQuestion('summary'); showSummary(); };
-    regionContainer.appendChild(btn);
-  });
+    // --- [기존] 퀴즈 로직 (일부 수정) ---
+    const questions = document.querySelectorAll('.question');
+    let current = 0;
+    let answers = [];
 
-  function showSummary() {
-    let text = "";
-    for (let k in answers) text += answers[k] + " / ";
-    document.getElementById("summaryText").innerText = text;
-  }
-
-  // 갤러리 자동 로드
-  function loadCertificate() {
-    const cont = document.getElementById('certificateGallery');
-    for (let i = 1; i <= 6; i++) {
-      const img = new Image();
-      img.src = `s03/certificate_img${i}.jpg`;
-      img.onload = () => cont.appendChild(img);
+    // [신규] 퀴즈 리셋 함수
+    function resetQuiz() {
+      // 모든 질문 숨기기
+      questions.forEach(q => q.classList.remove('active'));
+      // 첫번째 질문 보이기
+      current = 0;
+      if (questions.length > 0) {
+        questions[0].classList.add('active');
+      }
+      // 답변 초기화
+      answers = [];
+      // 요약 내용 지우기
+      document.getElementById('summary').textContent = '';
+      // 모든 옵션 버튼 비활성화
+      document.querySelectorAll('.option-button').forEach(b => b.classList.remove('active'));
     }
-  }
 
-  function loadGallery() {
-    const cont = document.getElementById('photoGallery');
-    for (let i = 1; i <= 100; i++) {
-      const n = String(i).padStart(4,'0');
-      const img = new Image();
-      img.src = `jpg/${n}.jpg`;
-      img.onload = () => cont.appendChild(img);
+    // 버튼 자동 생성용 데이터
+    const data = {
+      opt1: ['공장','사무실','식당','빌딩','병원','상가','주택','아파트','원룸','학교','관공서','공연장','야외시설','선박','차량','항공기','공항','기타'],
+      opt2: ['이사','정리','이민','폐업','이전','철거','공사','화재','사건','사고','침수','기타'],
+      opt3: ['전체 알아서 해주세요','일괄정리','원상복구','중고판매정리','냄새제거','곰팡이제거','시설관리','폐기물처리','정리정돈','청소','기타'],
+      opt4: ['10평 미만','20평 미만','30평 미만','50평 미만','100평 미만','500평 미만','1000평 미만','1000평 이상','소규모','대규모','정기적인','기타'],
+      opt5: ['서울','경기','인천','강원','충북','충남','전북','전남','경북','경남','부산','대구','광주','대전','울산','세종','제주','해외','기타']
+    };
+
+    // 반복되는 버튼 생성 코드
+    Object.keys(data).forEach(id => {
+      const container = document.getElementById(id);
+      data[id].forEach(text => {
+        const btn = document.createElement('button');
+        btn.className = 'option-button';
+        btn.textContent = text;
+        container.appendChild(btn);
+      });
+    });
+
+    // 클릭 이벤트
+    document.querySelectorAll('.option-button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const parent = btn.closest('.question');
+        parent.querySelectorAll('.option-button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        setTimeout(() => showNext(), 200);
+      });
+    });
+
+    function showNext() {
+      questions[current].classList.remove('active');
+      current++;
+      if (current < questions.length) {
+        questions[current].classList.add('active');
+      }
+      if (current === questions.length - 1) summarize();
     }
-  }
 
-  loadCertificate();
-  loadGallery();
+    function summarize() {
+      answers = [];
+      document.querySelectorAll('#quiz-section .option-button.active').forEach(btn => {
+        answers.push(btn.textContent);
+      });
+      document.getElementById('summary').textContent = `선택하신 내용: ${answers.join(', ')}`;
+    }
 
-  function sendSms() {
-    const text = encodeURIComponent("상담 요청 내용: " + document.getElementById("summaryText").innerText);
-    location.href = "sms:01012345678?body=" + text;
-  }
-</script>
-
+    // 문자 전송
+    document.getElementById('sendSMS').addEventListener('click', () => {
+      const text = encodeURIComponent(`[올리셋 상담요청]\n${answers.join(', ')}`);
+      window.location.href = `sms:01057138417?body=${text}`;
+    });
+  </script>
 </body>
 </html>
