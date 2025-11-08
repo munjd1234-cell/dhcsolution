@@ -34,64 +34,49 @@
     z-index: 9999;
     opacity: 1;
     transition: opacity 0.5s ease-out; 
-    overflow: hidden; /* 애니메이션 경계 처리 */
+    overflow: hidden;
+    padding: 0 10px;
+    box-sizing: border-box;
   }
   #intro-screen.fade-out {
     opacity: 0;
   }
 
-  .intro-text-container {
-    position: relative;
-    width: 100%;
-    height: 50px; 
-    margin: 10px 0;
-    overflow: hidden;
+  /* 텍스트를 세로로 중앙 정렬하고 누적되게 함 */
+  .intro-item {
+    display: block;
+    opacity: 0;
+    color: #00bfa5;
+    transition: all 0.5s ease-in-out;
+    margin: 5px 0; /* 글자 간격 유지 */
+    transform: scale(0.9);
   }
   
-  .intro-phrase {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    opacity: 0;
-    white-space: nowrap;
-    transition: opacity 0.5s, transform 0.5s;
-    font-size: 30px;
-    color: #00bfa5; 
-    line-height: 1.2;
-  }
-
-  /* 텍스트가 나타날 때 (다음 텍스트가 로드되는 동안 잠시 보임) */
-  .intro-phrase.active {
+  /* 노출된 글자 (사라지지 않고 남아있음) */
+  .intro-item.visible {
     opacity: 1;
-    transform: translate(-50%, -50%) scale(1.0);
+    transform: scale(1.0);
+    color: #aaa; /* 남은 글자는 약간 흐리게 */
+    font-weight: 500;
   }
 
-  /* 텍스트가 사라질 때 (다음 텍스트를 위해 준비) */
-  .intro-phrase.zoom-out {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(1.5);
-    transition: opacity 0.3s, transform 0.3s;
+  /* 현재 글자 (강조) */
+  .intro-item.active {
+    opacity: 1;
+    transform: scale(1.15); /* 새로 나타날 때 강조 확대 */
+    color: #00bfa5;
+    font-weight: 800;
   }
 
-  /* 6번째 문장(마지막 문장)을 강조 */
-  .intro-phrase.final-phrase {
-    color: #fff; /* 흰색으로 강조 */
-    background-color: #00bfa5; /* 배경색으로 대비 강조 */
+  /* 마지막 문장 강조 (한번에 처리) */
+  .intro-item.final-phrase {
+    color: #fff;
+    background-color: #00bfa5;
     padding: 5px 15px;
     border-radius: 5px;
-    font-size: 36px; /* 더 크게 강조 */
+    font-size: 36px;
     font-weight: 900;
-  }
-
-  
-  /* [유지] 메인 콘텐츠 래퍼: 처음엔 완전히 숨김 */
-  #main-content-wrapper {
-    display: none; 
-    opacity: 0;
-    transition: opacity 0.5s;
-    width: 100%;
-    height: 100vh;
+    margin-top: 15px;
   }
   /* --- [획기적 개선] 끝 --- */
 
@@ -143,7 +128,6 @@
     background-color: #00bfa5;
     color: #fff;
   }
-  /* --- [유지] 끝 --- */
 
   main {
     margin-top: 125px; 
@@ -163,12 +147,12 @@
   .content-section.active {
     display: block; 
   }
-  #quiz-section.active .question.active { 
-    display: block; 
-  }
   .question { 
     display: none; 
     animation: fadeIn 0.3s ease-in-out; 
+  }
+  .question.active { 
+    display: block; 
   }
 
   @keyframes fadeIn {
@@ -201,7 +185,6 @@
     border: none;
     box-shadow: 0 0 8px #00bfa5;
   }
-  /* --- [유지] 끝 --- */
 
   .fixed-buttons {
     position: fixed;
@@ -275,7 +258,7 @@
     border: 1px solid #444;
   }
   
-  /* --- [회사소개 스타일 유지] --- */
+  /* --- [회사소개 스타일 수정/강화] --- */
   #company-section {
     text-align: left;
     max-width: 600px;
@@ -301,26 +284,33 @@
   #company-section strong {
     color: #00bfa5;
   }
-  #company-section ol {
-    text-align: left; 
-    max-width: 300px; 
-    margin: 20px auto; 
-    padding-left: 20px;
+  #company-section ul {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0 30px;
+    text-align: center;
   }
+  #company-section ul li {
+    background: #222;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    border-left: 4px solid #00bfa5;
+    font-size: 15px;
+  }
+  /* --- [회사소개 스타일 끝] --- */
 </style>
 </head>
 
 <body>
   
   <div id="intro-screen">
-    <div class="intro-text-container">
-      <div class="intro-phrase" data-phrase="1">떠나는 공간</div>
-      <div class="intro-phrase" data-phrase="2">중고처리</div>
-      <div class="intro-phrase" data-phrase="3">원상복구</div>
-      <div class="intro-phrase" data-phrase="4">청소</div>
-      <div class="intro-phrase" data-phrase="5">폐기물</div>
-      <div class="intro-phrase final-phrase" data-phrase="6">한번에 처리</div>
-    </div>
+    <span class="intro-item" data-phrase="1">떠나는 공간</span>
+    <span class="intro-item" data-phrase="2">중고처리</span>
+    <span class="intro-item" data-phrase="3">원상복구</span>
+    <span class="intro-item" data-phrase="4">청소</span>
+    <span class="intro-item" data-phrase="5">폐기물</span>
+    <span class="intro-item final-phrase" data-phrase="6">한번에 처리</span>
   </div>
   
   <div id="main-content-wrapper">
@@ -360,7 +350,7 @@
           <div class="options" id="opt5"></div>
         </div>
         <div class="question" id="q6">
-          <h3>도시/시/군을 선택해주세요</h3>
+          <h3>도시/시/군/구를 선택해주세요</h3>
           <div class="options" id="opt6"></div>
         </div>
         <div class="question" id="result">
@@ -371,97 +361,41 @@
       </div>
       <div id="company-section" class="content-section">
         <h2>올리셋(AllRest)</h2>
-        <p><strong>공간의 완벽한 마무리, 새로운 시작의 동반자</strong></p>
-        <p>공간을 떠나는 모든 순간을 위한 토탈 솔루션 파트너입니다.</p>
-        <p>이사를 가거나 폐업을 하거나 사업장을 옮길 때, 사람들은 새로운 시작에 집중하고 싶어합니다. 하지만 현실은 어떤가요? 여러 업체를 찾아 견적을 받고, 각각의 일정을 조율하고, 반복되는 현장 방문으로 시간과 에너지를 소진합니다.</p>
-        <p>올리셋은 바로 이 지점에서 출발했습니다.<br>"왜 한 곳에서 모든 것을 해결할 수 없을까?"</p>
-        <p>올리셋은 <strong>공간 퇴거 토탈 케어 전문 기업</strong>입니다.<br>
-        당신이 공간을 떠날 때 필요한 모든 과정을 하나의 창구에서, 하나의 팀이, 하나의 일정으로 완벽하게 마무리합니다.</p>
-
-        <h3>올리셋의 통합 서비스</h3>
-        <p>올리셋은 공간 퇴거 시 필요한 모든 과정을 하나로 통합하여 제공합니다.</p>
+        <p style="text-align: center;"><strong>공간 퇴거 토탈 케어 전문 기업</strong></p>
+        <p style="text-align: center;">이사를 가거나 폐업을 할 때, 여러 업체를 찾아 견적을 받고 일정을 조율하는<br> **모든 번거로움을 한번에 해결**합니다.</p>
         
-        <h4>공간 비우기 - 남겨진 모든 것의 처리</h4>
-        <p>사용하던 공간에는 수많은 물건들이 있습니다. 올리셋은 이 모든 것을 한 번에 정리합니다.<br>
-        가져갈 것과 버릴 것을 분류하고, 가치 있는 물건은 매입하고, 처리가 필요한 것은 적절히 수거합니다.<br>
-        대형 가구부터 작은 잡동사니까지, 당신이 신경 쓸 필요가 없습니다.</p>
+        <h3 style="margin-top: 40px;">💡 올리셋을 필요로 하는 순간들</h3>
+        <ul>
+          <li><strong>이사하는 세입자:</strong> 복잡한 원상복구, 짐 처리를 한 번에 해결하고 보증금을 온전히 돌려받고 싶을 때.</li>
+          <li><strong>폐업하는 사업자:</strong> 남은 집기, 재고 처리, 인테리어 철거, 공간 정리를 맡기고 싶을 때.</li>
+          <li><strong>사업장을 이전하는 기업:</strong> 기존 공간을 신속하게 정리하여 계약을 깔끔하게 마무리해야 할 때.</li>
+          <li><strong>급하게 정리해야 하는 경우:</strong> 상속, 경매 등으로 예상치 못한 공간 정리가 필요할 때.</li>
+        </ul>
 
-        <h4>공간 정리 - 완벽한 청소와 정돈</h4>
-        <p>비워진 공간을 깨끗하게 만듭니다.<br>
-        오랜 사용으로 누적된 때와 얼룩, 냄새까지 제거합니다. 주거공간, 사무실, 매장, 공장 등 공간의 특성에 맞는 전문적인 관리를 진행합니다.</p>
+        <h3>✅ 올리셋 통합 서비스 (One-Stop Total Care)</h3>
+        <div style="text-align: center; color: #00bfa5; font-weight: bold;">
+          공간 비우기(중고/폐기물 처리) - 공간 정리(청소/냄새 제거)<br>
+          공간 복구(원상복구/철거) - 공간 전환(매입/가치 재발견)
+        </div>
+        <p style="text-align: center; margin-top: 20px; font-size: 14px;">
+          **하나의 전화, 하나의 팀, 하나의 일정**으로 모든 과정을 책임집니다.
+        </p>
 
-        <h4>공간 복구 - 원래 상태로의 회복</h4>
-        <p>임대차 계약 시 받았던 그 상태로 돌려놓습니다.<br>
-        훼손된 벽지, 바닥, 시설물을 수리하고, 설치했던 것들을 철거합니다. 보증금을 온전히 돌려받기 위한, 혹은 다음 임차인을 맞이하기 위한 완벽한 복구 작업을 진행합니다.</p>
-
-        <h4>공간 전환 - 가치의 재발견</h4>
-        <p>버려지는 것들 속에서 가치를 찾아냅니다.<br>
-        중고로 판매 가능한 물건들을 현장에서 바로 감정하고 매입하여, 당신의 비용 부담을 줄여드립니다.<br>
-        사무용 집기, 가전제품, 공장 설비 등 전문적인 안목으로 공정한 가격을 제시합니다.</p>
-
-        <h3>왜 올리셋인가</h3>
-        
-        <h4>하나의 전화, 하나의 팀, 하나의 일정</h4>
-        <p>올리셋의 가장 큰 가치는 여기에 있습니다. 한 번의 연락으로 모든 것이 해결됩니다.<br>
-        여러 업체를 알아보고, 각각 견적을 받고, 따로따로 일정을 잡을 필요가 없습니다.<br>
-        우리 팀이 현장을 방문해 모든 것을 파악하고, 통합된 견적을 제시하며, 하나의 일정으로 모든 작업을 완료합니다.</p>
-
-        <h4>시간과 에너지의 절약</h4>
-        <p>이사나 폐업은 그 자체로 많은 에너지가 필요한 일입니다.<br>
-        새로운 공간 준비, 짐 정리, 각종 행정 절차 등 신경 써야 할 것이 산더미입니다.<br>
-        올리셋은 기존 공간의 뒷처리라는 무거운 짐을 덜어드립니다. 당신은 새로운 시작에만 집중하세요。</p>
-
-        <h4>비용의 투명성과 효율성</h4>
-        <p>통합 서비스로 불필요한 중복 비용을 없앱니다.<br>
-        중고물품 매입 금액을 전체 비용에서 차감하여, 실제 부담 금액을 최소화합니다. 숨겨진 추가 비용 없이, 처음 제시한 견적 그대로 작업을 완료합니다.</p>
-
-        <h4>전문성과 책임감</h4>
-        <p>올리셋의 팀원들은 각 분야의 전문가들입니다. 청소, 폐기물 처리, 인테리어 복구, 중고 감정 등 각자의 영역에서 오랜 경험을 쌓은 프로페셔널들이 하나의 팀으로 움직입니다.<br>
-        모든 과정에 대해 올리셋이 책임집니다.</p>
-
-        <h4>신속한 대응</h4>
-        <p>긴급하게 공간을 비워야 하는 상황에도 신속하게 대응합니다.<br>
-        24시간 내 현장 방문과 작업 착수가 가능하며, 체계적인 인력 운영으로 소규모 공간은 당일 완료, 대규모 공간도 최단 기간 내 마무리합니다.</p>
-
-        <h3>올리셋을 필요로 하는 순간들</h3>
-        <p><strong>이사를 준비하는 세입자</strong><br>
-        전세나 월세 계약이 끝나고 이사를 갈 때, 보증금을 온전히 돌려받으려면 깨끗한 상태로 집을 비워야 합니다.<br>
-        새집 준비에 바쁜 당신을 위해 올리셋이 구집의 모든 것을 해결합니다.</p>
-        
-        <p><strong>폐업을 결정한 사업자</strong><br>
-        음식점, 카페, 소매점을 운영하다 폐업을 결정했을 때, 남은 집기와 재고, 인테리어 철거, 공간 정리 등 해야 할 일이 많습니다.<br>
-        올리셋이 한 번에 처리합니다.</p>
-
-        <p><strong>사업장을 이전하는 기업</strong><br>
-        사무실이나 공장을 이전할 때, 기존 공간을 정리하는 것은 큰 부담입니다.<br>
-        올리셋이 신속하게 공간을 정리하여 임대차 계약을 깔끔하게 마무리할 수 있도록 돕습니다.</p>
-
-        <p><strong>새로운 임차인을 준비하는 건물주</strong><br>
-        임차인이 나간 후 다음 임차인을 위해 공간을 정비해야 할 때, 여러 업체를 부를 필요 없이 올리셋 한 곳에서 모든 것을 처리합니다.</p>
-
-        <p><strong>급하게 공간을 정리해야 하는 누구나</strong><br>
-        상속받은 부동산, 경매로 낙찰받은 물건, 예상치 못한 상황으로 급하게 공간을 비워야 할 때, 올리셋이 신속하게 도와드립니다.</p>
-
-        <h3>올리셋의 작업 방식</h3>
-        <ol>
-          <li><strong>상담:</strong> 전화나 온라인으로 상황을 간단히 알려주세요.</li>
-          <li><strong>현장 방문:</strong> 무료로 현장을 방문해 정확한 상태를 파악합니다.</li>
-          <li><strong>통합 견적:</strong> 모든 서비스를 포함한 하나의 명확한 견적을 제시합니다.</li>
-          <li><strong>일정 확정:</strong> 고객의 일정에 맞춰 작업 날짜를 정합니다.</li>
-          <li><strong>작업 진행:</strong> 전문 팀이 투입되어 모든 과정을 처리합니다.</li>
-          <li><strong>최종 확인:</strong> 고객과 함께 깨끗해진 공간을 확인하고 인계합니다.</li>
+        <h3>▶️ 올리셋 작업 방식</h3>
+        <ol style="margin-top: 10px;">
+          <li><strong>상담:</strong> 전화나 온라인으로 간단히 상황 접수</li>
+          <li><strong>현장 방문:</strong> 무료 방문 후 정확한 견적 제시 (통합 견적)</li>
+          <li><strong>일정 확정:</strong> 고객 일정에 맞춰 작업 날짜 결정</li>
+          <li><strong>작업 진행:</strong> 전문 팀이 투입되어 일괄 처리</li>
+          <li><strong>최종 확인:</strong> 고객과 함께 공간 확인 및 인계</li>
         </ol>
 
-        <h3>새로운 시작을 위한 완벽한 마무리</h3>
-        <p>공간을 떠나는 순간은 새로운 시작의 시점입니다. 하지만 과거를 정리하지 못하면 미래로 나아가기 어렵습니다.<br>
-        올리셋은 당신이 뒤를 돌아보지 않고 앞으로 나아갈 수 있도록, 모든 마무리를 완벽하게 처리합니다.<br>
-        복잡한 과정들, 번거로운 일정 조율, 여러 업체와의 소통 스트레스 없이, 올리셋과 함께라면 공간의 마지막을 깔끔하게 정리할 수 있습니다.<br>
-        당신의 새로운 시작, 올리셋이 함께합니다.</p>
-
-        <p><strong>올리셋(AllRest) - 모든 것을 정리하고, 편안히 새로운 시작으로</strong></p>
-        <p>언제나 고객의 편의를 최우선으로 생각합니다.<br>
-        새로운 시작을 위한 완벽한 마무리, 올리셋과 함께 하세요.<br>
-        24시간 상담 가능 | 연중무휴 | 전국 서비스</p>
+        <p style="text-align: center; margin-top: 30px;">
+          **올리셋(AllRest)** - **새로운 시작을 위한 완벽한 마무리**
+        </p>
+        <p style="text-align: center; font-size: 12px; color: #888;">
+          24시간 상담 가능 | 연중무휴 | 전국 서비스
+        </p>
       </div>
       <div id="tech-section" class="content-section">
         <h3>기술</h3> 
@@ -497,13 +431,14 @@
     // --- [인트로 애니메이션 로직] ---
     const introScreen = document.getElementById('intro-screen');
     const mainWrapper = document.getElementById('main-content-wrapper');
-    const phrases = document.querySelectorAll('.intro-phrase');
+    const phrases = document.querySelectorAll('.intro-item');
+    const questions = document.querySelectorAll('#quiz-section .question');
     const menuButtons = document.querySelectorAll('.menu-btn');
     const contentSections = document.querySelectorAll('.content-section');
     const quizSection = document.getElementById('quiz-section');
     const onestopMenuBtn = document.querySelector('[data-target="quiz-section"]');
     const mainContent = document.querySelector('main');
-
+    
     let currentPhrase = 0;
     const intervalTime = 600; 
 
@@ -511,15 +446,14 @@
         if (currentPhrase < phrases.length) {
             const currentEl = phrases[currentPhrase];
             
-            // 이전 문장 사라지게 (Zoom out)
+            // 이전 문장이 있었다면 'active'를 'visible'로 변경 (남아있게 함)
             if (currentPhrase > 0) {
                 const prevEl = phrases[currentPhrase - 1];
                 prevEl.classList.remove('active');
-                prevEl.classList.add('zoom-out');
+                prevEl.classList.add('visible');
             }
 
-            // 현재 문장 나타나게
-            currentEl.classList.remove('zoom-out');
+            // 현재 문장 나타나게 (강조)
             currentEl.classList.add('active');
 
             currentPhrase++;
@@ -534,20 +468,17 @@
         }
     }
 
-    // [수정] 인트로 종료 후 메인 콘텐츠와 퀴즈 첫 질문을 표시
+    // 인트로 종료 후 메인 콘텐츠와 퀴즈 첫 질문을 표시
     function showMainContent() {
-      // 인트로 화면 숨김 처리 시작
       introScreen.classList.add('fade-out');
       
-      // 전환 애니메이션(0.5초) 후 완전히 숨기고 메인 콘텐츠 표시
       setTimeout(() => {
         introScreen.style.display = 'none';
         
-        // 메인 콘텐츠 표시 및 초기화면 설정 (원스톱)
         mainWrapper.style.display = 'block';
         mainWrapper.style.opacity = '1';
         
-        // 초기 탭 활성화: '원스톱' (quiz-section)
+        // 초기 탭 활성화: '원스톱'
         menuButtons.forEach(b => b.classList.remove('active'));
         onestopMenuBtn.classList.add('active');
         
@@ -559,9 +490,11 @@
         quizSection.style.display = 'block';
         quizSection.classList.add('active');
         
-        // [핵심 수정] 퀴즈 초기 상태로 설정 및 첫 질문 표시
+        // 퀴즈 초기 상태로 설정 및 첫 질문 (q1) 표시
         resetQuiz(); 
-        questions[0].classList.add('active'); // q1 활성화
+        if (questions.length > 0) {
+            questions[0].classList.add('active'); 
+        }
       }, 500); 
     }
 
@@ -634,10 +567,9 @@
     });
 
     // --- [퀴즈 로직] ---
-    const questions = document.querySelectorAll('#quiz-section .question');
     let current = 0;
     let answers = [];
-    let selectedRegion = ''; // 선택된 지역 저장용 변수
+    let selectedRegion = ''; 
 
     function resetQuiz() {
       questions.forEach(q => q.classList.remove('active'));
@@ -645,26 +577,29 @@
       answers = [];
       document.getElementById('summary').textContent = '';
       document.querySelectorAll('#quiz-section .option-button').forEach(b => b.classList.remove('active'));
-      document.getElementById('opt6').innerHTML = ''; // 도시명 초기화
+      document.getElementById('opt6').innerHTML = ''; 
       selectedRegion = '';
     }
 
     const data = {
       opt1: ['공장','사무실','식당','빌딩','병원','상가','주택','아파트','원룸','학교','관공서','공연장','야외시설','선박','차량','항공기','공항','기타'],
       opt2: ['이사','정리','이민','폐업','이전','철거','공사','화재','사건','사고','침수','기타'],
-      opt3: ['전체 알아서 해주세요','일괄정리','원상복구','중고판매정리','냄새제거','곰팡이제거','시설관리','폐기물처리','정리정돈','청소','기타'],
+      opt3: ['전체 알아서 해주세요','일괄정리','원상복구','중고판매정리','냄새제거','곰팡이','시설관리','폐기물처리','정리정돈','청소','기타'],
       opt4: ['10평 미만','20평 미만','30평 미만','50평 미만','100평 미만','500평 미만','1000평 미만','1000평 이상','소규모','대규모','정기적인','기타'],
-      // Q5 지역 데이터
       opt5: ['서울','경기','인천','강원','충북','충남','전북','전남','경북','경남','부산','대구','광주','대전','울산','세종','제주','해외','기타'],
-      // Q6 도시명 데이터 (일부 지역만 예시로 포함. 필요 시 추가/수정 가능)
+      // Q6 도시명 데이터 (필요한 경우에만 시/군/구 상세 선택)
       cities: {
-        '서울': ['강남구', '강동구', '강북구', '강서구', '관악구', '광진구', '구로구', '금천구', '노원구', '도봉구', '동대문구', '동작구', '마포구', '서대문구', '서초구', '성동구', '성북구', '송파구', '양천구', '영등포구', '용산구', '은평구', '종로구', '중구', '중랑구'],
-        '경기': ['수원시', '고양시', '용인시', '성남시', '부천시', '안산시', '안양시', '화성시', '평택시', '의정부시', '파주시', '시흥시', '김포시', '광명시', '광주시', '군포시', '이천시', '양주시', '오산시', '구리시', '안성시', '포천시', '의왕시', '하남시', '여주시', '동두천시', '과천시', '가평군', '양평군', '연천군'],
-        '인천': ['강화군', '계양구', '남동구', '동구', '미추홀구', '부평구', '서구', '연수구', '옹진군', '중구'],
-        // 나머지 지역은 '기타'로 임시 처리
+        '서울': ['종로구', '중구', '용산구', '성동구', '광진구', '동대문구', '중랑구', '성북구', '강북구', '도봉구', '노원구', '은평구', '서대문구', '마포구', '양천구', '강서구', '구로구', '금천구', '영등포구', '동작구', '관악구', '서초구', '강남구', '송파구', '강동구'],
+        '경기': ['수원시', '고양시', '용인시', '성남시', '부천시', '안산시', '안양시', '화성시', '평택시', '의정부시', '파주시', '시흥시', '김포시', '광명시', '광주시', '군포시', '하남시', '오산시', '이천시', '양주시', '구리시', '안성시', '포천시', '의왕시', '여주시', '동두천시', '과천시', '가평군', '양평군', '연천군'],
+        '인천': ['계양구', '남동구', '동구', '미추홀구', '부평구', '서구', '연수구', '중구', '옹진군', '강화군'],
+        '부산': ['중구', '서구', '동구', '영도구', '부산진구', '동래구', '남구', '북구', '해운대구', '사하구', '금정구', '강서구', '연제구', '수영구', '사상구', '기장군'],
+        '대구': ['중구', '동구', '서구', '남구', '북구', '수성구', '달서구', '달성군'],
+        '광주': ['동구', '서구', '남구', '북구', '광산구'],
+        '대전': ['동구', '중구', '서구', '유성구', '대덕구'],
+        '울산': ['중구', '남구', '동구', '북구', '울주군'],
+        '세종': ['세종시 전역'],
         '강원': ['강원 전역'], '충북': ['충북 전역'], '충남': ['충남 전역'], '전북': ['전북 전역'], '전남': ['전남 전역'], 
-        '경북': ['경북 전역'], '경남': ['경남 전역'], '부산': ['부산 전역'], '대구': ['대구 전역'], '광주': ['광주 전역'], 
-        '대전': ['대전 전역'], '울산': ['울산 전역'], '세종': ['세종 전역'], '제주': ['제주 전역'], '해외': ['해외 전역'], '기타': ['상관 없음']
+        '경북': ['경북 전역'], '경남': ['경남 전역'], '제주': ['제주 전역'], '해외': ['해외 전역'], '기타': ['상관 없음']
       }
     };
 
@@ -698,13 +633,12 @@
         parent.querySelectorAll('.option-button').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
 
-        // Q5 (지역)을 선택했을 경우, Q6 (도시)를 위한 데이터 준비
         if (parentId === 'q5') {
             selectedRegion = btn.textContent;
             generateCityOptions(selectedRegion);
             setTimeout(() => showNext(), 200);
         } else if (parentId === 'q6') {
-            // Q6 (도시)를 선택했을 경우, 최종 결과로 이동
+            // Q6 (도시)를 선택했을 경우, 최종 결과로 이동 (isLastStep=true)
             setTimeout(() => showNext(true), 200); 
         } else {
             // 그 외 질문은 다음 질문으로 이동
@@ -722,18 +656,20 @@
             const btn = createOptionButton(city);
             cityContainer.appendChild(btn);
         });
-
-        // Q6에만 적용되는 특별한 클릭 로직이 필요 없으므로 createOptionButton에서 정의된 handleOptionClick 사용
     }
 
-
     function showNext(isLastStep = false) {
+      const isQ5 = questions[current].id === 'q5'; // 현재 질문이 Q5인지 확인
+      
       questions[current].classList.remove('active');
       current++;
       
-      // Q5 선택 후 Q6를 건너뛰고 결과로 바로 가야 하는 지역(예: 제주, 해외, 기타) 처리
-      if (current === 5 && !data.cities[selectedRegion]) {
-        current++; // Q6 건너뛰기
+      // [수정] Q5 선택 후, 해당 지역의 도시 목록이 1개 이하일 경우 (상세 선택이 불필요한 경우) Q6 건너뛰기
+      if (isQ5) {
+          const cityList = data.cities[selectedRegion];
+          if (cityList && cityList.length <= 1) {
+              current++; // Q6 건너뛰기
+          }
       }
 
       if (current < questions.length) {
