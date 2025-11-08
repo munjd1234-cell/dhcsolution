@@ -14,7 +14,7 @@
     overflow: hidden;
   }
 
-  /* --- [신규/수정] 인트로 화면 스타일 및 애니메이션 --- */
+  /* --- [획기적 개선] 인트로 화면 스타일 및 애니메이션 --- */
   #intro-screen {
     position: fixed;
     top: 0;
@@ -34,12 +34,58 @@
     z-index: 9999;
     opacity: 1;
     transition: opacity 0.5s ease-out; 
+    overflow: hidden; /* 애니메이션 경계 처리 */
   }
   #intro-screen.fade-out {
     opacity: 0;
   }
+
+  .intro-text-container {
+    position: relative;
+    width: 100%;
+    height: 50px; 
+    margin: 10px 0;
+    overflow: hidden;
+  }
   
-  /* [수정] 메인 콘텐츠 래퍼: 처음엔 완전히 숨김 */
+  .intro-phrase {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    white-space: nowrap;
+    transition: opacity 0.5s, transform 0.5s;
+    font-size: 30px;
+    color: #00bfa5; 
+    line-height: 1.2;
+  }
+
+  /* 텍스트가 나타날 때 (다음 텍스트가 로드되는 동안 잠시 보임) */
+  .intro-phrase.active {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.0);
+  }
+
+  /* 텍스트가 사라질 때 (다음 텍스트를 위해 준비) */
+  .intro-phrase.zoom-out {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.5);
+    transition: opacity 0.3s, transform 0.3s;
+  }
+
+  /* 6번째 문장(마지막 문장)을 강조 */
+  .intro-phrase.final-phrase {
+    color: #fff; /* 흰색으로 강조 */
+    background-color: #00bfa5; /* 배경색으로 대비 강조 */
+    padding: 5px 15px;
+    border-radius: 5px;
+    font-size: 36px; /* 더 크게 강조 */
+    font-weight: 900;
+  }
+
+  
+  /* [유지] 메인 콘텐츠 래퍼: 처음엔 완전히 숨김 */
   #main-content-wrapper {
     display: none; 
     opacity: 0;
@@ -47,29 +93,7 @@
     width: 100%;
     height: 100vh;
   }
-
-  /* 깜빡이는 애니메이션 */
-  @keyframes blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0; }
-  }
-
-  /* 움직이는 애니메이션 (좌우 왕복) */
-  @keyframes move-text {
-    0% { transform: translateX(-5px); }
-    50% { transform: translateX(5px); } 
-    100% { transform: translateX(-5px); }
-  }
-
-  .blinking-text {
-    animation: blink 1s step-end infinite;
-  }
-
-  .moving-text {
-    display: inline-block;
-    animation: move-text 2s ease-in-out infinite;
-  }
-  /* --- [신규/수정] 끝 --- */
+  /* --- [획기적 개선] 끝 --- */
 
   header {
     position: fixed;
@@ -90,7 +114,7 @@
     color: #333;
   }
 
-  /* --- [수정] 메인 메뉴바 --- */
+  /* --- [유지] 메인 메뉴바 --- */
   .main-menu {
     position: fixed;
     top: 79px; 
@@ -119,7 +143,7 @@
     background-color: #00bfa5;
     color: #fff;
   }
-  /* --- [수정] 끝 --- */
+  /* --- [유지] 끝 --- */
 
   main {
     margin-top: 125px; 
@@ -131,7 +155,7 @@
     box-sizing: border-box;
   }
 
-  /* --- [기존] 퀴즈 및 섹션 스타일 유지 --- */
+  /* --- [유지] 퀴즈 및 섹션 스타일 유지 --- */
   .content-section {
     display: none; 
     animation: fadeIn 0.3s ease-in-out;
@@ -177,7 +201,7 @@
     border: none;
     box-shadow: 0 0 8px #00bfa5;
   }
-  /* --- [기존] 끝 --- */
+  /* --- [유지] 끝 --- */
 
   .fixed-buttons {
     position: fixed;
@@ -289,10 +313,14 @@
 <body>
   
   <div id="intro-screen">
-    <span class="moving-text">떠나는 공간</span><br>
-    <br> 중고처리 원상복구<br>
-    청소 폐기물<br>
-    <br> <span class="blinking-text">한번에 처리</span>
+    <div class="intro-text-container">
+      <div class="intro-phrase" data-phrase="1">떠나는 공간</div>
+      <div class="intro-phrase" data-phrase="2">중고처리</div>
+      <div class="intro-phrase" data-phrase="3">원상복구</div>
+      <div class="intro-phrase" data-phrase="4">청소</div>
+      <div class="intro-phrase" data-phrase="5">폐기물</div>
+      <div class="intro-phrase final-phrase" data-phrase="6">한번에 처리</div>
+    </div>
   </div>
   
   <div id="main-content-wrapper">
@@ -377,7 +405,7 @@
         <h4>시간과 에너지의 절약</h4>
         <p>이사나 폐업은 그 자체로 많은 에너지가 필요한 일입니다.<br>
         새로운 공간 준비, 짐 정리, 각종 행정 절차 등 신경 써야 할 것이 산더미입니다.<br>
-        올리셋은 기존 공간의 뒷처리라는 무거운 짐을 덜어드립니다. 당신은 새로운 시작에만 집중하세요.</p>
+        올리셋은 기존 공간의 뒷처리라는 무거운 짐을 덜어드립니다. 당신은 새로운 시작에만 집중하세요。</p>
 
         <h4>비용의 투명성과 효율성</h4>
         <p>통합 서비스로 불필요한 중복 비용을 없앱니다.<br>
@@ -432,15 +460,18 @@
         24시간 상담 가능 | 연중무휴 | 전국 서비스</p>
       </div>
       <div id="tech-section" class="content-section">
-        <h3>기술</h3> <div class="gallery" id="tech-gallery-container">
+        <h3>기술</h3> 
+        <div class="gallery" id="tech-gallery-container">
           </div>
       </div>
       <div id="portfolio-section" class="content-section">
-        <h3>실적</h3> <div class="gallery" id="portfolio-gallery-container">
+        <h3>실적</h3> 
+        <div class="gallery" id="portfolio-gallery-container">
           </div>
       </div>
       <div id="partner-section" class="content-section">
-        <h3>협력</h3> <div class="gallery" id="partner-gallery-container">
+        <h3>협력</h3> 
+        <div class="gallery" id="partner-gallery-container">
           </div>
       </div>
       </main>
@@ -459,14 +490,40 @@
   </div>
 
   <script>
-    // --- [수정] 인트로 및 메인 로직 ---
+    // --- [수정] 인트로 애니메이션 로직 ---
     const introScreen = document.getElementById('intro-screen');
     const mainWrapper = document.getElementById('main-content-wrapper');
-    const quizSection = document.getElementById('quiz-section');
-    const menuButtons = document.querySelectorAll('.menu-btn');
-    const contentSections = document.querySelectorAll('.content-section');
-    const mainContent = document.querySelector('main');
-    const onestopMenuBtn = document.querySelector('[data-target="quiz-section"]');
+    const phrases = document.querySelectorAll('.intro-phrase');
+    const phraseTexts = ['떠나는 공간', '중고처리', '원상복구', '청소', '폐기물', '한번에 처리'];
+    let currentPhrase = 0;
+    const intervalTime = 600; // 문장 간격 (0.6초)
+
+    function showNextPhrase() {
+        if (currentPhrase < phrases.length) {
+            const currentEl = phrases[currentPhrase];
+            
+            // 이전 문장 사라지게 (Zoom out)
+            if (currentPhrase > 0) {
+                const prevEl = phrases[currentPhrase - 1];
+                prevEl.classList.remove('active');
+                prevEl.classList.add('zoom-out');
+            }
+
+            // 현재 문장 나타나게
+            currentEl.classList.remove('zoom-out');
+            currentEl.classList.add('active');
+
+            currentPhrase++;
+
+            // 다음 문장 로드 예약
+            if (currentPhrase < phrases.length) {
+                setTimeout(showNextPhrase, intervalTime);
+            } else {
+                // 마지막 문장 표시 후 메인 콘텐츠 로드 예약
+                setTimeout(showMainContent, 1000); 
+            }
+        }
+    }
 
     function showMainContent() {
       // 인트로 화면 숨김 처리 시작
@@ -495,22 +552,22 @@
       }, 500); 
     }
 
-    // 페이지 로드 시 인트로 시작 후 메인 콘텐츠로 전환 (총 2초 후)
+    // 페이지 로드 시 인트로 시작
     document.addEventListener('DOMContentLoaded', () => {
-      // 1.5초 대기 후 showMainContent 실행 (총 2초 노출)
-      setTimeout(showMainContent, 1500); 
+        // 인트로 애니메이션 시작 (최초 0.5초 딜레이 후 시작)
+        setTimeout(showNextPhrase, 500);
     });
 
 
     // --- [신규/수정] 갤러리 자동 로드 로직 ---
-
+    
     /**
      * 파일명 규칙에 따라 갤러리 이미지를 동적으로 생성하여 HTML에 삽입합니다.
      * @param {string} containerId - 이미지를 추가할 갤러리 컨테이너의 ID
      * @param {string} folder - 이미지 폴더 경로 (예: 's03', 'jpg', 's04')
      * @param {number} startIdx - 시작 인덱스 (일반적으로 1)
-     * @param {number} maxAttempts - 최대 시도 횟수 (예: 100)
-     * @param {string} baseName - 파일 이름 기본 (예: 'certificate_img')
+     * @param {number} maxAttempts - 최대 시도 횟수
+     * @param {string} baseName - 파일 이름 기본 (예: 'certificate_img', 'partner_goloimg')
      * @param {number} padding - 파일 번호의 자릿수 (예: '001'이면 3)
      */
     function generateGallery(containerId, folder, startIdx, maxAttempts, baseName = '', padding = 0) {
@@ -518,11 +575,7 @@
         if (!container) return;
 
         let html = '';
-        // *주의: 실제 서버의 파일 시스템 접근은 불가능하므로, 
-        //  이 코드는 파일이 순차적으로 존재할 것이라는 가정 하에 로드합니다.
-        //  파일이 존재하지 않을 경우 브라우저가 깨진 이미지를 표시할 수 있습니다.
-        //  자동 로드를 위해서는 이처럼 파일명을 추측하거나, 파일 목록 JSON 파일을 사용해야 합니다.
-
+        
         for (let i = startIdx; i < startIdx + maxAttempts; i++) {
             let fileName;
             let altText;
@@ -533,14 +586,13 @@
                 fileName = `${fileNumber}.jpg`;
                 altText = `이미지 ${fileNumber}`;
             } else {
-                // 기본 파일명 (예: certificate_img1.jpg)
+                // 기본 파일명 + 숫자 (예: certificate_img1.jpg)
                 fileName = `${baseName}${i}.jpg`;
                 altText = `${baseName} ${i}`;
             }
 
             const src = `${folder}/${fileName}`;
-            // 브라우저가 이미지 파일이 존재하지 않으면 X 표시를 보여주지만,
-            // 관리자가 폴더에 파일을 넣으면 자동으로 로드되는 효과를 제공합니다.
+            // onerror: 이미지가 존재하지 않으면 숨김 처리하여 깔끔하게 보장
             html += `<img src="${src}" alt="${altText}" onerror="this.style.display='none'">`;
         }
         container.innerHTML = html;
@@ -551,14 +603,19 @@
         // 1. 기술 (s03/certificate_img1.jpg~) - 최대 10개까지 로드 시도
         generateGallery('tech-gallery-container', 's03', 1, 10, 'certificate_img', 0); 
         
-        // 2. 실적 (jpg/001.jpg~) - 최대 100개까지 로드 시도 (001.jpg ~ 100.jpg)
+        // 2. 실적 (jpg/001.jpg~) - 최대 100개까지 로드 시도 
         generateGallery('portfolio-gallery-container', 'jpg', 1, 100, '', 3);
 
-        // 3. 협력 (s04/001.jpg~) - 최대 50개까지 로드 시도
-        generateGallery('partner-gallery-container', 's04', 1, 50, '', 3);
+        // 3. 협력 (s04/partner_goloimg1.jpg~) - 파일명 변경 반영
+        generateGallery('partner-gallery-container', 's04', 1, 50, 'partner_goloimg', 0);
     });
 
     // --- [기존] 탭 네비게이션 로직 ---
+    const menuButtons = document.querySelectorAll('.menu-btn');
+    const contentSections = document.querySelectorAll('.content-section');
+    const mainContent = document.querySelector('main');
+    const onestopMenuBtn = document.querySelector('[data-target="quiz-section"]');
+
     menuButtons.forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.preventDefault(); 
@@ -591,7 +648,7 @@
       });
     });
 
-    // --- [기존] 퀴즈 로직 (생략된 부분은 동일) ---
+    // --- [기존] 퀴즈 로직 ---
     const questions = document.querySelectorAll('#quiz-section .question');
     let current = 0;
     let answers = [];
