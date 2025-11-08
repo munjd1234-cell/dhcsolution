@@ -339,7 +339,7 @@
 
     <main>
       <div id="quiz-section" class="content-section">
-        <div class="question active" id="q1">
+        <div class="question" id="q1">
           <h3>어떤 공간을 정리하시겠어요?</h3>
           <div class="options" id="opt1"></div>
         </div>
@@ -358,6 +358,10 @@
         <div class="question" id="q5">
           <h3>지역을 선택해주세요</h3>
           <div class="options" id="opt5"></div>
+        </div>
+        <div class="question" id="q6">
+          <h3>도시/시/군을 선택해주세요</h3>
+          <div class="options" id="opt6"></div>
         </div>
         <div class="question" id="result">
           <h3>상담 내용 </h3>
@@ -490,13 +494,18 @@
   </div>
 
   <script>
-    // --- [수정] 인트로 애니메이션 로직 ---
+    // --- [인트로 애니메이션 로직] ---
     const introScreen = document.getElementById('intro-screen');
     const mainWrapper = document.getElementById('main-content-wrapper');
     const phrases = document.querySelectorAll('.intro-phrase');
-    const phraseTexts = ['떠나는 공간', '중고처리', '원상복구', '청소', '폐기물', '한번에 처리'];
+    const menuButtons = document.querySelectorAll('.menu-btn');
+    const contentSections = document.querySelectorAll('.content-section');
+    const quizSection = document.getElementById('quiz-section');
+    const onestopMenuBtn = document.querySelector('[data-target="quiz-section"]');
+    const mainContent = document.querySelector('main');
+
     let currentPhrase = 0;
-    const intervalTime = 600; // 문장 간격 (0.6초)
+    const intervalTime = 600; 
 
     function showNextPhrase() {
         if (currentPhrase < phrases.length) {
@@ -525,6 +534,7 @@
         }
     }
 
+    // [수정] 인트로 종료 후 메인 콘텐츠와 퀴즈 첫 질문을 표시
     function showMainContent() {
       // 인트로 화면 숨김 처리 시작
       introScreen.classList.add('fade-out');
@@ -548,28 +558,20 @@
 
         quizSection.style.display = 'block';
         quizSection.classList.add('active');
-        resetQuiz(); // 퀴즈 초기 상태로 설정
+        
+        // [핵심 수정] 퀴즈 초기 상태로 설정 및 첫 질문 표시
+        resetQuiz(); 
+        questions[0].classList.add('active'); // q1 활성화
       }, 500); 
     }
 
     // 페이지 로드 시 인트로 시작
     document.addEventListener('DOMContentLoaded', () => {
-        // 인트로 애니메이션 시작 (최초 0.5초 딜레이 후 시작)
         setTimeout(showNextPhrase, 500);
     });
 
-
-    // --- [신규/수정] 갤러리 자동 로드 로직 ---
+    // --- [갤러리 자동 로드 로직] ---
     
-    /**
-     * 파일명 규칙에 따라 갤러리 이미지를 동적으로 생성하여 HTML에 삽입합니다.
-     * @param {string} containerId - 이미지를 추가할 갤러리 컨테이너의 ID
-     * @param {string} folder - 이미지 폴더 경로 (예: 's03', 'jpg', 's04')
-     * @param {number} startIdx - 시작 인덱스 (일반적으로 1)
-     * @param {number} maxAttempts - 최대 시도 횟수
-     * @param {string} baseName - 파일 이름 기본 (예: 'certificate_img', 'partner_goloimg')
-     * @param {number} padding - 파일 번호의 자릿수 (예: '001'이면 3)
-     */
     function generateGallery(containerId, folder, startIdx, maxAttempts, baseName = '', padding = 0) {
         const container = document.getElementById(containerId);
         if (!container) return;
@@ -581,18 +583,15 @@
             let altText;
             
             if (padding > 0) {
-                // 숫자형 파일명 (예: 001.jpg)
                 let fileNumber = i.toString().padStart(padding, '0');
                 fileName = `${fileNumber}.jpg`;
                 altText = `이미지 ${fileNumber}`;
             } else {
-                // 기본 파일명 + 숫자 (예: certificate_img1.jpg)
                 fileName = `${baseName}${i}.jpg`;
                 altText = `${baseName} ${i}`;
             }
 
             const src = `${folder}/${fileName}`;
-            // onerror: 이미지가 존재하지 않으면 숨김 처리하여 깔끔하게 보장
             html += `<img src="${src}" alt="${altText}" onerror="this.style.display='none'">`;
         }
         container.innerHTML = html;
@@ -600,68 +599,54 @@
 
     // 갤러리 로드 실행
     document.addEventListener('DOMContentLoaded', () => {
-        // 1. 기술 (s03/certificate_img1.jpg~) - 최대 10개까지 로드 시도
         generateGallery('tech-gallery-container', 's03', 1, 10, 'certificate_img', 0); 
-        
-        // 2. 실적 (jpg/001.jpg~) - 최대 100개까지 로드 시도 
         generateGallery('portfolio-gallery-container', 'jpg', 1, 100, '', 3);
-
-        // 3. 협력 (s04/partner_goloimg1.jpg~) - 파일명 변경 반영
         generateGallery('partner-gallery-container', 's04', 1, 50, 'partner_goloimg', 0);
     });
 
-    // --- [기존] 탭 네비게이션 로직 ---
-    const menuButtons = document.querySelectorAll('.menu-btn');
-    const contentSections = document.querySelectorAll('.content-section');
-    const mainContent = document.querySelector('main');
-    const onestopMenuBtn = document.querySelector('[data-target="quiz-section"]');
-
+    // --- [탭 네비게이션 로직] ---
     menuButtons.forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.preventDefault(); 
         const targetId = btn.getAttribute('data-target');
         const targetSection = document.getElementById(targetId);
 
-        // 모든 섹션 숨기기
         contentSections.forEach(section => {
           section.style.display = 'none';
           section.classList.remove('active');
         });
 
-        // 타겟 섹션 보이기
         if (targetSection) {
           targetSection.style.display = 'block';
           targetSection.classList.add('active');
         }
         
-        // "원스톱" 탭 클릭 시 퀴즈 리셋
         if (targetId === 'quiz-section') {
           resetQuiz();
+          questions[0].classList.add('active'); // 원스톱 재클릭 시 Q1 활성화
         }
 
-        // 메뉴 버튼 활성 상태 업데이트
         menuButtons.forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         
-        // 새 섹션 클릭 시 메인 콘텐츠 스크롤을 맨 위로
         mainContent.scrollTop = 0;
       });
     });
 
-    // --- [기존] 퀴즈 로직 ---
+    // --- [퀴즈 로직] ---
     const questions = document.querySelectorAll('#quiz-section .question');
     let current = 0;
     let answers = [];
+    let selectedRegion = ''; // 선택된 지역 저장용 변수
 
     function resetQuiz() {
       questions.forEach(q => q.classList.remove('active'));
       current = 0;
-      if (questions.length > 0) {
-        questions[0].classList.add('active');
-      }
       answers = [];
       document.getElementById('summary').textContent = '';
       document.querySelectorAll('#quiz-section .option-button').forEach(b => b.classList.remove('active'));
+      document.getElementById('opt6').innerHTML = ''; // 도시명 초기화
+      selectedRegion = '';
     }
 
     const data = {
@@ -669,35 +654,94 @@
       opt2: ['이사','정리','이민','폐업','이전','철거','공사','화재','사건','사고','침수','기타'],
       opt3: ['전체 알아서 해주세요','일괄정리','원상복구','중고판매정리','냄새제거','곰팡이제거','시설관리','폐기물처리','정리정돈','청소','기타'],
       opt4: ['10평 미만','20평 미만','30평 미만','50평 미만','100평 미만','500평 미만','1000평 미만','1000평 이상','소규모','대규모','정기적인','기타'],
-      opt5: ['서울','경기','인천','강원','충북','충남','전북','전남','경북','경남','부산','대구','광주','대전','울산','세종','제주','해외','기타']
+      // Q5 지역 데이터
+      opt5: ['서울','경기','인천','강원','충북','충남','전북','전남','경북','경남','부산','대구','광주','대전','울산','세종','제주','해외','기타'],
+      // Q6 도시명 데이터 (일부 지역만 예시로 포함. 필요 시 추가/수정 가능)
+      cities: {
+        '서울': ['강남구', '강동구', '강북구', '강서구', '관악구', '광진구', '구로구', '금천구', '노원구', '도봉구', '동대문구', '동작구', '마포구', '서대문구', '서초구', '성동구', '성북구', '송파구', '양천구', '영등포구', '용산구', '은평구', '종로구', '중구', '중랑구'],
+        '경기': ['수원시', '고양시', '용인시', '성남시', '부천시', '안산시', '안양시', '화성시', '평택시', '의정부시', '파주시', '시흥시', '김포시', '광명시', '광주시', '군포시', '이천시', '양주시', '오산시', '구리시', '안성시', '포천시', '의왕시', '하남시', '여주시', '동두천시', '과천시', '가평군', '양평군', '연천군'],
+        '인천': ['강화군', '계양구', '남동구', '동구', '미추홀구', '부평구', '서구', '연수구', '옹진군', '중구'],
+        // 나머지 지역은 '기타'로 임시 처리
+        '강원': ['강원 전역'], '충북': ['충북 전역'], '충남': ['충남 전역'], '전북': ['전북 전역'], '전남': ['전남 전역'], 
+        '경북': ['경북 전역'], '경남': ['경남 전역'], '부산': ['부산 전역'], '대구': ['대구 전역'], '광주': ['광주 전역'], 
+        '대전': ['대전 전역'], '울산': ['울산 전역'], '세종': ['세종 전역'], '제주': ['제주 전역'], '해외': ['해외 전역'], '기타': ['상관 없음']
+      }
     };
 
+    // 퀴즈 버튼 생성 함수 (opt1 ~ opt5)
     Object.keys(data).forEach(id => {
-      const container = document.getElementById(id);
-      data[id].forEach(text => {
+        if (id !== 'cities') {
+            const container = document.getElementById(id);
+            if (container) {
+                data[id].forEach(text => {
+                    const btn = createOptionButton(text);
+                    container.appendChild(btn);
+                });
+            }
+        }
+    });
+
+    function createOptionButton(text) {
         const btn = document.createElement('button');
         btn.className = 'option-button';
         btn.textContent = text;
-        container.appendChild(btn);
-      });
-    });
+        btn.addEventListener('click', handleOptionClick);
+        return btn;
+    }
 
-    document.querySelectorAll('#quiz-section .option-button').forEach(btn => {
-      btn.addEventListener('click', () => {
+    function handleOptionClick(event) {
+        const btn = event.target;
         const parent = btn.closest('.question');
+        const parentId = parent.id;
+        
+        // 버튼 활성화 토글
         parent.querySelectorAll('.option-button').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-        setTimeout(() => showNext(), 200);
-      });
-    });
 
-    function showNext() {
+        // Q5 (지역)을 선택했을 경우, Q6 (도시)를 위한 데이터 준비
+        if (parentId === 'q5') {
+            selectedRegion = btn.textContent;
+            generateCityOptions(selectedRegion);
+            setTimeout(() => showNext(), 200);
+        } else if (parentId === 'q6') {
+            // Q6 (도시)를 선택했을 경우, 최종 결과로 이동
+            setTimeout(() => showNext(true), 200); 
+        } else {
+            // 그 외 질문은 다음 질문으로 이동
+            setTimeout(() => showNext(), 200);
+        }
+    }
+
+    // 도시명 옵션 생성 함수 (Q6)
+    function generateCityOptions(region) {
+        const cityContainer = document.getElementById('opt6');
+        cityContainer.innerHTML = '';
+        const cities = data.cities[region] || [region + ' 전역']; 
+        
+        cities.forEach(city => {
+            const btn = createOptionButton(city);
+            cityContainer.appendChild(btn);
+        });
+
+        // Q6에만 적용되는 특별한 클릭 로직이 필요 없으므로 createOptionButton에서 정의된 handleOptionClick 사용
+    }
+
+
+    function showNext(isLastStep = false) {
       questions[current].classList.remove('active');
       current++;
+      
+      // Q5 선택 후 Q6를 건너뛰고 결과로 바로 가야 하는 지역(예: 제주, 해외, 기타) 처리
+      if (current === 5 && !data.cities[selectedRegion]) {
+        current++; // Q6 건너뛰기
+      }
+
       if (current < questions.length) {
         questions[current].classList.add('active');
       }
-      if (current === questions.length - 1) summarize();
+      
+      // 마지막 질문(result)로 이동할 때
+      if (current === questions.length - 1 || isLastStep) summarize();
     }
 
     function summarize() {
