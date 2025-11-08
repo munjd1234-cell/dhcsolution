@@ -14,7 +14,7 @@
     overflow: hidden;
   }
 
-  /* --- [신규/수정] 인트로 화면 스타일 --- */
+  /* --- [신규/수정] 인트로 화면 스타일 및 애니메이션 --- */
   #intro-screen {
     position: fixed;
     top: 0;
@@ -33,7 +33,7 @@
     line-height: 1.4;
     z-index: 9999;
     opacity: 1;
-    transition: opacity 0.5s ease-out; /* 전환 시간 단축 */
+    transition: opacity 0.5s ease-out; 
   }
   #intro-screen.fade-out {
     opacity: 0;
@@ -46,6 +46,28 @@
     transition: opacity 0.5s;
     width: 100%;
     height: 100vh;
+  }
+
+  /* 깜빡이는 애니메이션 */
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
+  /* 움직이는 애니메이션 (좌우 왕복) */
+  @keyframes move-text {
+    0% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); } 
+    100% { transform: translateX(-5px); }
+  }
+
+  .blinking-text {
+    animation: blink 1s step-end infinite;
+  }
+
+  .moving-text {
+    display: inline-block;
+    animation: move-text 2s ease-in-out infinite;
   }
   /* --- [신규/수정] 끝 --- */
 
@@ -236,7 +258,7 @@
     margin: 0 auto;
     line-height: 1.6;
     color: #ccc;
-    padding: 0 10px 30px; /* 스크롤 마지막 부분 여백 */
+    padding: 0 10px 30px; 
   }
   #company-section h2, 
   #company-section h3,
@@ -267,10 +289,10 @@
 <body>
   
   <div id="intro-screen">
-    떠나는 공간<br>
-    중고처리 원상복구<br>
+    <span class="moving-text">떠나는 공간</span><br>
+    <br> 중고처리 원상복구<br>
     청소 폐기물<br>
-    한번에 처리
+    <br> <span class="blinking-text">한번에 처리</span>
   </div>
   
   <div id="main-content-wrapper">
@@ -319,8 +341,7 @@
         <h2>올리셋(AllRest)</h2>
         <p><strong>공간의 완벽한 마무리, 새로운 시작의 동반자</strong></p>
         <p>공간을 떠나는 모든 순간을 위한 토탈 솔루션 파트너입니다.</p>
-        <p>이사를 가거나 폐업을 하거나 사업장을 옮길 때, 사람들은 새로운 시작에 집중하고 싶어합니다. 하지만 현실은 어떤가요?</p>
-        <p>여러 업체를 찾아 견적을 받고, 각각의 일정을 조율하고, 반복되는 현장 방문으로 시간과 에너지를 소진합니다.</p>
+        <p>이사를 가거나 폐업을 하거나 사업장을 옮길 때, 사람들은 새로운 시작에 집중하고 싶어합니다. 하지만 현실은 어떤가요? 여러 업체를 찾아 견적을 받고, 각각의 일정을 조율하고, 반복되는 현장 방문으로 시간과 에너지를 소진합니다.</p>
         <p>올리셋은 바로 이 지점에서 출발했습니다.<br>"왜 한 곳에서 모든 것을 해결할 수 없을까?"</p>
         <p>올리셋은 <strong>공간 퇴거 토탈 케어 전문 기업</strong>입니다.<br>
         당신이 공간을 떠날 때 필요한 모든 과정을 하나의 창구에서, 하나의 팀이, 하나의 일정으로 완벽하게 마무리합니다.</p>
@@ -411,35 +432,15 @@
         24시간 상담 가능 | 연중무휴 | 전국 서비스</p>
       </div>
       <div id="tech-section" class="content-section">
-        <h3>기술 (s03 폴더 - certificate_img1.jpg ~ 6.jpg)</h3>
-        <div class="gallery">
-          <img src="s03/certificate_img1.jpg" alt="기술 1">
-          <img src="s03/certificate_img2.jpg" alt="기술 2">
-          <img src="s03/certificate_img3.jpg" alt="기술 3">
-          <img src="s03/certificate_img4.jpg" alt="기술 4">
-          <img src="s03/certificate_img5.jpg" alt="기술 5">
-          <img src="s03/certificate_img6.jpg" alt="기술 6">
-        </div>
+        <h3>기술</h3> <div class="gallery" id="tech-gallery-container">
+          </div>
       </div>
       <div id="portfolio-section" class="content-section">
-        <h3>실적 (jpg 폴더 - 001.jpg ~ 021.jpg)</h3>
-        <div class="gallery">
-          <img src="jpg/001.jpg" alt="실적 1"><img src="jpg/002.jpg" alt="실적 2"><img src="jpg/003.jpg" alt="실적 3">
-          <img src="jpg/004.jpg" alt="실적 4"><img src="jpg/005.jpg" alt="실적 5"><img src="jpg/006.jpg" alt="실적 6">
-          <img src="jpg/007.jpg" alt="실적 7"><img src="jpg/008.jpg" alt="실적 8"><img src="jpg/009.jpg" alt="실적 9">
-          <img src="jpg/010.jpg" alt="실적 10"><img src="jpg/011.jpg" alt="실적 11"><img src="jpg/012.jpg" alt="실적 12">
-          <img src="jpg/013.jpg" alt="실적 13"><img src="jpg/014.jpg" alt="실적 14"><img src="jpg/015.jpg" alt="실적 15">
-          <img src="jpg/016.jpg" alt="실적 16"><img src="jpg/017.jpg" alt="실적 17"><img src="jpg/018.jpg" alt="실적 18">
-          <img src="jpg/019.jpg" alt="실적 19"><img src="jpg/020.jpg" alt="실적 20"><img src="jpg/021.jpg" alt="실적 21">
+        <h3>실적</h3> <div class="gallery" id="portfolio-gallery-container">
           </div>
       </div>
       <div id="partner-section" class="content-section">
-        <h3>협력 (s04 폴더 - 001.jpg부터)</h3>
-        <div class="gallery">
-          <img src="s04/001.jpg" alt="협력사 1"><img src="s04/002.jpg" alt="협력사 2"><img src="s04/003.jpg" alt="협력사 3">
-          <img src="s04/004.jpg" alt="협력사 4"><img src="s04/005.jpg" alt="협력사 5"><img src="s04/006.jpg" alt="협력사 6">
-          <img src="s04/007.jpg" alt="협력사 7"><img src="s04/008.jpg" alt="협력사 8"><img src="s04/009.jpg" alt="협력사 9">
-          <img src="s04/010.jpg" alt="협력사 10">
+        <h3>협력</h3> <div class="gallery" id="partner-gallery-container">
           </div>
       </div>
       </main>
@@ -501,6 +502,62 @@
     });
 
 
+    // --- [신규/수정] 갤러리 자동 로드 로직 ---
+
+    /**
+     * 파일명 규칙에 따라 갤러리 이미지를 동적으로 생성하여 HTML에 삽입합니다.
+     * @param {string} containerId - 이미지를 추가할 갤러리 컨테이너의 ID
+     * @param {string} folder - 이미지 폴더 경로 (예: 's03', 'jpg', 's04')
+     * @param {number} startIdx - 시작 인덱스 (일반적으로 1)
+     * @param {number} maxAttempts - 최대 시도 횟수 (예: 100)
+     * @param {string} baseName - 파일 이름 기본 (예: 'certificate_img')
+     * @param {number} padding - 파일 번호의 자릿수 (예: '001'이면 3)
+     */
+    function generateGallery(containerId, folder, startIdx, maxAttempts, baseName = '', padding = 0) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+
+        let html = '';
+        // *주의: 실제 서버의 파일 시스템 접근은 불가능하므로, 
+        //  이 코드는 파일이 순차적으로 존재할 것이라는 가정 하에 로드합니다.
+        //  파일이 존재하지 않을 경우 브라우저가 깨진 이미지를 표시할 수 있습니다.
+        //  자동 로드를 위해서는 이처럼 파일명을 추측하거나, 파일 목록 JSON 파일을 사용해야 합니다.
+
+        for (let i = startIdx; i < startIdx + maxAttempts; i++) {
+            let fileName;
+            let altText;
+            
+            if (padding > 0) {
+                // 숫자형 파일명 (예: 001.jpg)
+                let fileNumber = i.toString().padStart(padding, '0');
+                fileName = `${fileNumber}.jpg`;
+                altText = `이미지 ${fileNumber}`;
+            } else {
+                // 기본 파일명 (예: certificate_img1.jpg)
+                fileName = `${baseName}${i}.jpg`;
+                altText = `${baseName} ${i}`;
+            }
+
+            const src = `${folder}/${fileName}`;
+            // 브라우저가 이미지 파일이 존재하지 않으면 X 표시를 보여주지만,
+            // 관리자가 폴더에 파일을 넣으면 자동으로 로드되는 효과를 제공합니다.
+            html += `<img src="${src}" alt="${altText}" onerror="this.style.display='none'">`;
+        }
+        container.innerHTML = html;
+    }
+
+    // 갤러리 로드 실행
+    document.addEventListener('DOMContentLoaded', () => {
+        // 1. 기술 (s03/certificate_img1.jpg~) - 최대 10개까지 로드 시도
+        generateGallery('tech-gallery-container', 's03', 1, 10, 'certificate_img', 0); 
+        
+        // 2. 실적 (jpg/001.jpg~) - 최대 100개까지 로드 시도 (001.jpg ~ 100.jpg)
+        generateGallery('portfolio-gallery-container', 'jpg', 1, 100, '', 3);
+
+        // 3. 협력 (s04/001.jpg~) - 최대 50개까지 로드 시도
+        generateGallery('partner-gallery-container', 's04', 1, 50, '', 3);
+    });
+
     // --- [기존] 탭 네비게이션 로직 ---
     menuButtons.forEach(btn => {
       btn.addEventListener('click', (e) => {
@@ -534,7 +591,7 @@
       });
     });
 
-    // --- [기존] 퀴즈 로직 ---
+    // --- [기존] 퀴즈 로직 (생략된 부분은 동일) ---
     const questions = document.querySelectorAll('#quiz-section .question');
     let current = 0;
     let answers = [];
